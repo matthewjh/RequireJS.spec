@@ -1,0 +1,20 @@
+{
+  "name": "RequireJS.spec",
+  "version": "0.0.0",
+  "homepage": "https://github.com/matthewjh/RequireJS.spec",
+  "authors": [
+    "Matthew Hill"
+  ],
+  "main": "main.js",
+  "moduleType": [
+    "globals"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ]
+}

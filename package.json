@@ -1,0 +1,19 @@
+{
+  "name": "RequireJS.spec",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/matthewjh/RequireJS.spec.git"
+  },
+  "author": "Matthew Hill",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/matthewjh/RequireJS.spec/issues"
+  },
+  "homepage": "https://github.com/matthewjh/RequireJS.spec"
+}
