@@ -14,7 +14,8 @@ gulp.task('lint', function () {
 
 gulp.task('rjs-build', function () {
   rjs({
-    baseUrl: './src',
+    baseUrl: 'src/',
+    mainConfigFile: 'src/requirejs-config.js',
     out: 'built.js',
     include: ['test'],
     insertRequire: ['test']
