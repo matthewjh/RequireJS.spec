@@ -15,5 +15,8 @@
   "bugs": {
     "url": "https://github.com/matthewjh/RequireJS.spec/issues"
   },
-  "homepage": "https://github.com/matthewjh/RequireJS.spec"
+  "homepage": "https://github.com/matthewjh/RequireJS.spec",
+  "devDependencies": {
+    "gulp": "^3.8.11"
+  }
 }
