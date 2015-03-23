@@ -1,3 +1,3 @@
-require([], function () {
+define([], function () {
   alert('hi');
 });

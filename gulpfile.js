@@ -16,7 +16,8 @@ gulp.task('rjs-build', function () {
   rjs({
     baseUrl: './src',
     out: 'built.js',
-    include: ['test']
+    include: ['test'],
+    insertRequire: ['test']
   })
   .pipe(gulp.dest('./'));
 });

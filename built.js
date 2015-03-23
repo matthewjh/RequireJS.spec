@@ -1,6 +1,6 @@
 
-require([], function () {
+define('test',[], function () {
   alert('hi');
 });
 
-define("test", function(){});
+require(["test"]);
