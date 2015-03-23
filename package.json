@@ -17,6 +17,8 @@
   },
   "homepage": "https://github.com/matthewjh/RequireJS.spec",
   "devDependencies": {
-    "gulp": "^3.8.11"
+    "gulp": "^3.8.11",
+    "gulp-jshint": "^1.9.4",
+    "jshint-stylish": "^1.0.1"
   }
 }
