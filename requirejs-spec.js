@@ -433,6 +433,8 @@ var requirejs, require, define;
 define("../bower_components/almond/almond", function(){});
 
 define('test',[], function () {
+  
+
   alert('hi');
 });
 

@@ -7,7 +7,7 @@ gulp.task('default', function () {
 gulp.task('lint', function () {
   var jshint = require('gulp-jshint');
 
-  return gulp.src('src/*.js')
+  return gulp.src('src/**/*.js')
     .pipe(jshint())
     .pipe(jshint.reporter('jshint-stylish'));
 });
@@ -19,10 +19,24 @@ gulp.task('rjs-build', function () {
     baseUrl: 'src/',
     name: '../bower_components/almond/almond',
     mainConfigFile: 'src/requirejs-config.js',
-    out: 'built.js',
+    out: 'requirejs-spec.js',
     include: ['test'],
     wrap: true,
     insertRequire: ['test']
   })
   .pipe(gulp.dest('./'));
+});
+
+gulp.task('test', function () {
+  var karma = require('gulp-karma');
+
+  return gulp.src('src/**/*.spec.js')
+    .pipe(karma({
+      configFile: 'karma.conf.js',
+      action: 'run'
+    }))
+    .on('error', function(err) {
+      // Make sure failed tests cause gulp to exit non-zero
+      throw err;
+    });
 });
