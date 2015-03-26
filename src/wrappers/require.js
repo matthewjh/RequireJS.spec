@@ -10,7 +10,6 @@ define([
   };
 
   // TODO: investigate why Object.setPrototypeOf didn't work here.
-  // jsh
   requireWrapper.__proto__ = originalRequire; // jshint ignore:line
 
   requireWrapper.config = requireConfigWrapper;

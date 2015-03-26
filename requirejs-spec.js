@@ -473,6 +473,7 @@ define('wrappers/define',[
       dependencies = null;
     }
 
+    // We have to do this because originalDefine will break if we pass it null arguments
     originalDefineArguments = [];
     [id, dependencies, factory].forEach(function (argument) {
       if (argument) {
@@ -483,19 +484,62 @@ define('wrappers/define',[
     originalDefine.apply(null, originalDefineArguments);
   };
 
+  // Required per AMD spec: https://github.com/amdjs/amdjs-api/wiki/AMD#defineamd-property-
   defineWrapper.amd = originalDefine.amd;
 
   return defineWrapper;
 });
 
+define('original-require',[
+  'window',
+  ], function (window) {
+  
+
+  return window.require;
+});
+
+define('wrappers/require.config',[
+  'original-require'
+  ], function (originalRequire) {
+  
+  var requireConfigWrapper;
+
+  requireConfigWrapper = function () {
+    originalRequire.config.apply(null, arguments);
+  };
+
+  return requireConfigWrapper;
+});
+
+define('wrappers/require',[
+  'original-require',
+  'wrappers/require.config'
+  ], function (originalRequire, requireConfigWrapper) {
+  
+  var requireWrapper;
+
+  requireWrapper = function () {
+    originalRequire.apply(null, arguments);
+  };
+
+  // TODO: investigate why Object.setPrototypeOf didn't work here.
+  requireWrapper.__proto__ = originalRequire; // jshint ignore:line
+
+  requireWrapper.config = requireConfigWrapper;
+
+  return requireWrapper;
+});
+
 define('globals-exporter',[
   'window',
-  'wrappers/define'
-  ], function (window, wrappedDefine) {
+  'wrappers/define',
+  'wrappers/require'
+  ], function (window, wrappedDefine, wrappedRequire) {
   
 
   return function () {
     window.define = wrappedDefine;
+    window.require = wrappedRequire;
   };
 });
 
