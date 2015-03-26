@@ -30,7 +30,7 @@ gulp.task('rjs-build', function () {
 gulp.task('test', function () {
   var karma = require('gulp-karma');
 
-  return gulp.src('src/**/*.spec.js')
+  return gulp.src('src/test-requirejs-config.js')
     .pipe(karma({
       configFile: 'karma.conf.js',
       action: 'run'

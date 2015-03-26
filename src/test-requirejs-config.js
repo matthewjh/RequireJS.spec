@@ -17,10 +17,10 @@ implModuleSuffix = '-impl';
 implFileRegex = /^\/base\/src.*\.js$/i;
 mockModulesPath = '../test/unit/mocks/';
 mockModuleSuffix = '.mock';
-testFileRegex = /(spec|a)\.js$/i;
+testFileRegex = /(spec|test)\.js$/i;
 
 getPathToModule = function getPathToModule (path) {
-  return path.replace(/^\/src\//, '').replace(/\.js$/, '');
+  return path.replace(/^\/base\/src\//, '').replace(/\.js$/, '');
 };
 
 // generate requirejs map so that mock modules can be injected into units under test
