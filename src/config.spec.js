@@ -11,5 +11,9 @@ define([
     it('should have the default mock suffix', function () {
       expect(config.mockSuffix).toEqual('.mock');
     });
+
+    it('should have the default alwaysUseImpl list', function () {
+      expect(config.alwaysUseImpl).toEqual([]);
+    });
   });
 })

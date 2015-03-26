@@ -4,6 +4,7 @@ define([], function () {
   return {
     //Default values
     implRegex: /^impl\~/,
-    mockSuffix: '.mock'
+    mockSuffix: '.mock',
+    alwaysUseImpl: []
   };
 })

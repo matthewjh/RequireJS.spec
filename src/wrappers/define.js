@@ -4,7 +4,12 @@ define([
   ], function (originalDefine, config) {
   'use strict';
   var defineWrapper,
+      isDependencyExcludedFromMocking,
       mapDependencies;
+
+  isDependencyExcludedFromMocking = function (dependency) {
+    return config.alwaysUseImpl.indexOf(dependency) >= 0;
+  };
 
   // Map each 'IMPL-id' to 'id' and each 'id' to 'mockPath/id.mock'
   mapDependencies = function (dependencies) {
@@ -12,12 +17,12 @@ define([
       if (config.implRegex.test(dependency)) {
         // Strip impl prefix/suffix
         dependencies[index] = dependency.replace(config.implRegex, '');
-      } else {
+      } else if (!isDependencyExcludedFromMocking(dependency)) {
         // Add mock path and suffix
-        dependencies[index] = config.mockPath + dependency + config.mockSuffix;
+        dependencies[index] = config.mockPath + dependency + config.mockSuffix + '.js';
       }
     });
-  }
+  };
 
   defineWrapper = function (id, dependencies, factory) {
     var originalDefineArguments;

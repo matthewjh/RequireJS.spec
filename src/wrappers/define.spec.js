@@ -63,7 +63,7 @@ define([
     });
 
     describe('when called with dependencies including an impl module', function () {
-      it('should call originalDefine with the resolved dependencies', function () {
+      it('should call originalDefine with the correctly resolved dependencies', function () {
         var dependencies,
             id,
             resolvedDependencies;
@@ -71,10 +71,11 @@ define([
         config.implRegex = /impl\~/;
         config.mockPath = 'mock/';
         config.mockSuffix = '.mock';
+        config.alwaysUseImpl = ['library'];
 
         id = 'some-module-id';
-        dependencies = ['impl~unit-under-test', 'unit-not-under-test', 'unit-not-under-test2'];
-        resolvedDependencies = ['unit-under-test', 'mock/unit-not-under-test.mock', 'mock/unit-not-under-test2.mock'];
+        dependencies = ['library', 'impl~unit-under-test', 'unit-not-under-test', 'unit-not-under-test2'];
+        resolvedDependencies = ['library', 'unit-under-test', 'mock/unit-not-under-test.mock.js', 'mock/unit-not-under-test2.mock.js'];
 
         defineWrapper(id, dependencies, noOpFactory);
 
