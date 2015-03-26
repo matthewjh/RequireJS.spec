@@ -4,6 +4,7 @@ define([], function () {
   var config,
       getConfigMock;
 
+  // This is pretty disgusting... hence this project.
   afterEach(function () {
     for (var prop in config) {
       if (config.hasOwnProperty(prop)) {

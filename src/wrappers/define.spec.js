@@ -1,7 +1,8 @@
 define([
   'wrappers/define-impl',
-  'original-define'
-  ], function (defineWrapper, originalDefine) {
+  'original-define',
+  'config'
+  ], function (defineWrapper, originalDefine, config) {
   'use strict';
 
   describe('define wrapper', function () {
@@ -58,6 +59,26 @@ define([
         defineWrapper(id, dependencies, noOpFactory);
 
         expect(originalDefine.withArgs(id, dependencies, noOpFactory).callCount).toBe(1);
+      });
+    });
+
+    describe('when called with dependencies including an impl module', function () {
+      it('should call originalDefine with the resolved dependencies', function () {
+        var dependencies,
+            id,
+            resolvedDependencies;
+
+        config.implRegex = /impl\~/;
+        config.mockPath = 'mock/';
+        config.mockSuffix = '.mock';
+
+        id = 'some-module-id';
+        dependencies = ['impl~unit-under-test', 'unit-not-under-test', 'unit-not-under-test2'];
+        resolvedDependencies = ['unit-under-test', 'mock/unit-not-under-test.mock', 'mock/unit-not-under-test2.mock'];
+
+        defineWrapper(id, dependencies, noOpFactory);
+
+        expect(originalDefine.withArgs(id, resolvedDependencies, noOpFactory).callCount).toBe(1);
       });
     });
   });

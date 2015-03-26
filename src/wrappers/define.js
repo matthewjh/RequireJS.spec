@@ -1,8 +1,23 @@
 define([
-  'original-define'
-  ], function (originalDefine) {
+  'original-define',
+  'config'
+  ], function (originalDefine, config) {
   'use strict';
-  var defineWrapper;
+  var defineWrapper,
+      mapDependencies;
+
+  // Map each 'IMPL-id' to 'id' and each 'id' to 'mockPath/id.mock'
+  mapDependencies = function (dependencies) {
+    dependencies.forEach(function (dependency, index) {
+      if (config.implRegex.test(dependency)) {
+        // Strip impl prefix/suffix
+        dependencies[index] = dependency.replace(config.implRegex, '');
+      } else {
+        // Add mock path and suffix
+        dependencies[index] = config.mockPath + dependency + config.mockSuffix;
+      }
+    });
+  }
 
   defineWrapper = function (id, dependencies, factory) {
     var originalDefineArguments;
@@ -23,6 +38,10 @@ define([
     if (dependencies && dependencies.constructor && dependencies.constructor === Function) {
       factory = dependencies;
       dependencies = null;
+    }
+
+    if (dependencies) {
+      mapDependencies(dependencies);
     }
 
     // We have to do this because originalDefine will break if we pass it null arguments
