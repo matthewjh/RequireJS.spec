@@ -446,11 +446,36 @@ define('original-define',[
   return window.define;
 });
 
-define('wrappers/define',[
-  'original-define'
-  ], function (originalDefine) {
+define('config',[], function () {
   
-  var defineWrapper;
+
+  return {
+    //Default values
+    implRegex: /^impl\~/,
+    mockSuffix: '.mock'
+  };
+})
+;
+define('wrappers/define',[
+  'original-define',
+  'config'
+  ], function (originalDefine, config) {
+  
+  var defineWrapper,
+      mapDependencies;
+
+  // Map each 'IMPL-id' to 'id' and each 'id' to 'mockPath/id.mock'
+  mapDependencies = function (dependencies) {
+    dependencies.forEach(function (dependency, index) {
+      if (config.implRegex.test(dependency)) {
+        // Strip impl prefix/suffix
+        dependencies[index] = dependency.replace(config.implRegex, '');
+      } else {
+        // Add mock path and suffix
+        dependencies[index] = config.mockPath + dependency + config.mockSuffix;
+      }
+    });
+  }
 
   defineWrapper = function (id, dependencies, factory) {
     var originalDefineArguments;
@@ -471,6 +496,10 @@ define('wrappers/define',[
     if (dependencies && dependencies.constructor && dependencies.constructor === Function) {
       factory = dependencies;
       dependencies = null;
+    }
+
+    if (dependencies) {
+      mapDependencies(dependencies);
     }
 
     // We have to do this because originalDefine will break if we pass it null arguments
@@ -498,16 +527,6 @@ define('original-require',[
   return window.require;
 });
 
-define('config',[], function () {
-  
-
-  return {
-    //Default values
-    implRegex: /^impl\~/,
-    mockSuffix: '.mock'
-  };
-})
-;
 define('wrappers/require.config',[
   'original-require',
   'config'
