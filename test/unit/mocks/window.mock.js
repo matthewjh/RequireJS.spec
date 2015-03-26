@@ -1,19 +1,27 @@
 define([
   'sinon'
   ], function (sinon) {
-  var windowMock;
+  var getWindowMock,
+      windowMock;
 
-  windowMock = {
-    require: sinon.stub(),
-    define: sinon.stub()
+  getWindowMock = function () {
+    var mock;
+
+    mock = {
+      require: sinon.stub(),
+      define: sinon.stub()
+    };
+
+    // https://github.com/amdjs/amdjs-api/wiki/AMD#defineamd-property-
+    mock.define.amd = {};
+
+    return mock;
   };
 
-  // https://github.com/amdjs/amdjs-api/wiki/AMD#defineamd-property-
-  windowMock.define.amd = {};
+  windowMock = getWindowMock();
 
   afterEach(function () {
-    windowMock.require.reset();
-    windowMock.define.reset();
+    windowMock = getWindowMock();
   });
 
   return windowMock;
