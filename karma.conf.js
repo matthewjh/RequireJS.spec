@@ -14,11 +14,13 @@ module.exports = function(config) {
     basePath: '',
 
     // testing framework to use (jasmine/mocha/qunit/...)
-    frameworks: ['jasmine'],
+    frameworks: ['jasmine', 'requirejs'],
 
     // list of files / patterns to load in the browser
     files: [
-      'src/**/*.js',
+      'src/test-requirejs-config.js',
+      {pattern: 'src/**/*.js', included: false},
+      {pattern: 'bower_components/**/*.js', included: false}
     ],
 
     // list of files / patterns to exclude
@@ -42,7 +44,8 @@ module.exports = function(config) {
     // Which plugins to enable
     plugins: [
       'karma-phantomjs-launcher',
-      'karma-jasmine'
+      'karma-jasmine',
+      'karma-requirejs'
     ],
 
     // Continuous Integration mode
