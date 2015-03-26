@@ -498,14 +498,44 @@ define('original-require',[
   return window.require;
 });
 
-define('wrappers/require.config',[
-  'original-require'
-  ], function (originalRequire) {
+define('config',[], function () {
   
-  var requireConfigWrapper;
 
-  requireConfigWrapper = function () {
-    originalRequire.config.apply(null, arguments);
+  return {
+    //Default values
+    implRegex: /^impl\~/,
+    mockSuffix: '.mock'
+  };
+})
+;
+define('wrappers/require.config',[
+  'original-require',
+  'config'
+  ], function (originalRequire, config) {
+  
+  var customProperties,
+      requireConfigWrapper;
+
+  customProperties = [
+    'mockPath',
+    'implRegex',
+    'mockSuffix'
+  ];
+
+  requireConfigWrapper = function (requireConfig) {
+    for (var property in requireConfig) {
+      if (requireConfig.hasOwnProperty(property)) {
+        config[property] = requireConfig[property];
+      }
+    };
+
+    // Delete our custom properties before forwarding the config to require.config
+    // in case they cause any issues.
+    customProperties.forEach(function (customProperty) {
+      delete requireConfig[customProperty];
+    });
+
+    originalRequire.config(requireConfig);
   };
 
   return requireConfigWrapper;
