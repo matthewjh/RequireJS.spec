@@ -550,6 +550,4 @@ define('globals-exporter-self-executing',[
 
   globalsExporter();
 });
-
-require(["globals-exporter-self-executing"]);
-}());
+require('globals-exporter-self-executing');})();

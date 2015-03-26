@@ -21,8 +21,11 @@ gulp.task('rjs-build', function () {
     mainConfigFile: 'src/requirejs-config.js',
     out: 'requirejs-spec.js',
     include: ['globals-exporter-self-executing'],
-    insertRequire: ['globals-exporter-self-executing'],
-    wrap: true,
+    // Wrap build output with an IEFE (to isolate scope) and stick a sync require on the end to kickstart.
+    wrap: {
+      start: '(function () {',
+      end: 'require(\'globals-exporter-self-executing\');' + '})();'
+    }
   })
   .pipe(gulp.dest('./'));
 });
