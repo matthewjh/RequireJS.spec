@@ -25,6 +25,7 @@ define([
       dependencies = null;
     }
 
+    // We have to do this because originalDefine will break if we pass it null arguments
     originalDefineArguments = [];
     [id, dependencies, factory].forEach(function (argument) {
       if (argument) {
@@ -35,6 +36,7 @@ define([
     originalDefine.apply(null, originalDefineArguments);
   };
 
+  // Required per AMD spec: https://github.com/amdjs/amdjs-api/wiki/AMD#defineamd-property-
   defineWrapper.amd = originalDefine.amd;
 
   return defineWrapper;
