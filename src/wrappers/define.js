@@ -5,6 +5,8 @@ define([
   var defineWrapper;
 
   defineWrapper = function (id, dependencies, factory) {
+    var originalDefineArguments;
+
     // When called with 'id' and 'dependencies' omitted
     if (id.constructor === Function) {
       factory = id;
@@ -23,7 +25,14 @@ define([
       dependencies = null;
     }
 
-    originalDefine(id, dependencies, factory);
+    originalDefineArguments = [];
+    [id, dependencies, factory].forEach(function (argument) {
+      if (argument) {
+        originalDefineArguments.push(argument);
+      }
+    });
+
+    originalDefine.apply(null, originalDefineArguments);
   };
 
   defineWrapper.amd = originalDefine.amd;

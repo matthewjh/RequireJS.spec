@@ -19,7 +19,7 @@ define([
       it('should call originalDefine with the factory function', function () {
         defineWrapper(noOpFactory);
 
-        expect(originalDefine.withArgs(null, null, noOpFactory).callCount).toBe(1);
+        expect(originalDefine.withArgs(noOpFactory).callCount).toBe(1);
       });
     });
 
@@ -31,7 +31,7 @@ define([
 
         defineWrapper(id, noOpFactory);
 
-        expect(originalDefine.withArgs(id, null, noOpFactory).callCount).toBe(1);
+        expect(originalDefine.withArgs(id, noOpFactory).callCount).toBe(1);
       });
     });
 
@@ -43,7 +43,7 @@ define([
 
         defineWrapper(dependencies, noOpFactory);
 
-        expect(originalDefine.withArgs(null, dependencies, noOpFactory).callCount).toBe(1);
+        expect(originalDefine.withArgs(dependencies, noOpFactory).callCount).toBe(1);
       });
     });
 
