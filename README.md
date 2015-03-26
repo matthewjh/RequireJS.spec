@@ -73,7 +73,7 @@ define([
   ], function (mymodule, dep1) {
   'use strict';
 
-  // Do stuff 
+  // Test that mymodule does stuff
 });
 ````
 
