@@ -20,6 +20,7 @@ module.exports = function(config) {
     files: [
       'src/test-requirejs-config.js',
       {pattern: 'src/**/*.js', included: false},
+      {pattern: 'test/unit/mocks/**/*.mock.js', included: false},
       {pattern: 'bower_components/**/*.js', included: false}
     ],
 
