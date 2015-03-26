@@ -77,4 +77,4 @@ define([
 });
 ````
 
-then when running the unit test, `mymodule-impl` will be resolved to `/scripts/mymodule.js`, and `dep1` will resolve to `/test/unit/mocks/dep1.mock.js`.
+then when running the unit test, `mymodule-impl` will be resolved to `/scripts/mymodule.js`, and `dep1` will resolve to `/test/unit/mocks/dep1.mock.js`. This means that you can inject mocks for essentially everything BUT the unit you're testing (as specified by the impl prefix/suffix).
