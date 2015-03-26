@@ -7,4 +7,4 @@ define([
     require: window.require,
     define: window.define
   };
-})
+});

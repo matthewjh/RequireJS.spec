@@ -17,6 +17,10 @@
   "strict": true,
   "jquery": true,
   "globals": {
-    "define": true
+    "define": true,
+    "it": true,
+    "expect": true,
+    "describe": true,
+    "beforeEach": true
   }
 }

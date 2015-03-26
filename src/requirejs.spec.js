@@ -13,4 +13,4 @@ define([
       expect(requirejs.define).toBe(window.define);
     });
   });
-})
+});
