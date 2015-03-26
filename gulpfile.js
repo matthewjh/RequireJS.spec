@@ -28,15 +28,9 @@ gulp.task('rjs-build', function () {
 });
 
 gulp.task('test', function () {
-  var karma = require('gulp-karma');
+  var karma = require('karma').server;
 
-  return gulp.src('src/test-requirejs-config.js')
-    .pipe(karma({
-      configFile: 'karma.conf.js',
-      action: 'run'
-    }))
-    .on('error', function(err) {
-      // Make sure failed tests cause gulp to exit non-zero
-      throw err;
-    });
+  karma.start({
+    configFile: __dirname  + '/karma.conf.js'
+  });
 });
