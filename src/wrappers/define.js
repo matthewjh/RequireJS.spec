@@ -1,6 +1,6 @@
 define([
-  'window'
-  ], function (window) {
+  'original-define'
+  ], function (originalDefine) {
   'use strict';
   var defineWrapper;
 
@@ -23,10 +23,10 @@ define([
       dependencies = null;
     }
 
-    window.define(id, dependencies, factory);
+    originalDefine(id, dependencies, factory);
   };
 
-  defineWrapper.amd = window.define.amd;
+  defineWrapper.amd = originalDefine.amd;
 
   return defineWrapper;
 });

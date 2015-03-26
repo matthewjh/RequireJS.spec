@@ -1,7 +1,7 @@
 define([
   'wrappers/define-impl',
-  'window'
-  ], function (defineWrapper, window) {
+  'original-define'
+  ], function (defineWrapper, originalDefine) {
   'use strict';
 
   describe('define wrapper', function () {
@@ -12,43 +12,43 @@ define([
     });
 
     it('should preserve access to the amd property', function () {
-      expect(defineWrapper.amd).toBe(window.define.amd);
+      expect(defineWrapper.amd).toBe(originalDefine.amd);
     });
 
     describe('when called with just a factory function', function () {
-      it('should call window.define with the factory function', function () {
+      it('should call originalDefine with the factory function', function () {
         defineWrapper(noOpFactory);
 
-        expect(window.define.withArgs(null, null, noOpFactory).callCount).toBe(1);
+        expect(originalDefine.withArgs(null, null, noOpFactory).callCount).toBe(1);
       });
     });
 
     describe('when called with an id and a factory function', function () {
-      it('should call window.define with the id and the factory function', function () {
+      it('should call originalDefine with the id and the factory function', function () {
         var id;
 
         id = 'some-module-id';
 
         defineWrapper(id, noOpFactory);
 
-        expect(window.define.withArgs(id, null, noOpFactory).callCount).toBe(1);
+        expect(originalDefine.withArgs(id, null, noOpFactory).callCount).toBe(1);
       });
     });
 
     describe('when called with dependencies and a factory function', function () {
-      it('should call window.define with the dependencies and factory function', function () {
+      it('should call originalDefine with the dependencies and factory function', function () {
         var dependencies;
 
         dependencies = [];
 
         defineWrapper(dependencies, noOpFactory);
 
-        expect(window.define.withArgs(null, dependencies, noOpFactory).callCount).toBe(1);
+        expect(originalDefine.withArgs(null, dependencies, noOpFactory).callCount).toBe(1);
       });
     });
 
     describe('when called with an id, dependencies and a factory function', function () {
-      it('should call window.define with the id, dependencies, and factory function', function () {
+      it('should call originalDefine with the id, dependencies, and factory function', function () {
         var dependencies,
             id;
 
@@ -57,7 +57,7 @@ define([
 
         defineWrapper(id, dependencies, noOpFactory);
 
-        expect(window.define.withArgs(id, dependencies, noOpFactory).callCount).toBe(1);
+        expect(originalDefine.withArgs(id, dependencies, noOpFactory).callCount).toBe(1);
       });
     });
   });
