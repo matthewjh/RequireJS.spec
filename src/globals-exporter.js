@@ -1,10 +1,12 @@
 define([
   'window',
-  'wrappers/define'
-  ], function (window, wrappedDefine) {
+  'wrappers/define',
+  'wrappers/require'
+  ], function (window, wrappedDefine, wrappedRequire) {
   'use strict';
 
   return function () {
     window.define = wrappedDefine;
+    window.require = wrappedRequire;
   };
 });
