@@ -452,7 +452,8 @@ define('config',[], function () {
   return {
     //Default values
     implRegex: /^impl\~/,
-    mockSuffix: '.mock'
+    mockSuffix: '.mock',
+    alwaysUseImpl: []
   };
 })
 ;
@@ -462,7 +463,12 @@ define('wrappers/define',[
   ], function (originalDefine, config) {
   
   var defineWrapper,
+      isDependencyExcludedFromMocking,
       mapDependencies;
+
+  isDependencyExcludedFromMocking = function (dependency) {
+    return config.alwaysUseImpl.indexOf(dependency) >= 0;
+  };
 
   // Map each 'IMPL-id' to 'id' and each 'id' to 'mockPath/id.mock'
   mapDependencies = function (dependencies) {
@@ -470,12 +476,12 @@ define('wrappers/define',[
       if (config.implRegex.test(dependency)) {
         // Strip impl prefix/suffix
         dependencies[index] = dependency.replace(config.implRegex, '');
-      } else {
+      } else if (!isDependencyExcludedFromMocking(dependency)) {
         // Add mock path and suffix
-        dependencies[index] = config.mockPath + dependency + config.mockSuffix;
+        dependencies[index] = config.mockPath + dependency + config.mockSuffix + '.js';
       }
     });
-  }
+  };
 
   defineWrapper = function (id, dependencies, factory) {
     var originalDefineArguments;
@@ -538,7 +544,8 @@ define('wrappers/require.config',[
   customProperties = [
     'mockPath',
     'implRegex',
-    'mockSuffix'
+    'mockSuffix',
+    'alwaysUseImpl'
   ];
 
   requireConfigWrapper = function (requireConfig) {
