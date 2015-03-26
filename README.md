@@ -12,6 +12,7 @@ To this end RequireJS.spec provides:
 
 TODO:
 * Automatically reload state of module exports (e.g. stub call counters) for every single test.
+* Handle different RequireJS contexts. At present, RequireJS.spec only works if you have a single context.
 
 ## Usage
 
@@ -49,4 +50,31 @@ require.config({
 
 ```
 
+Now, given this config, if you were writing unit tests for `/scripts/mymodule.js`...
 
+Implementation file:
+
+```javascript
+define([
+  'dep1',
+  ], function (dep1) {
+  'use strict';
+
+  // Do stuff 
+});
+````
+
+Unit test file:
+
+```javascript
+define([
+  'mymodule-impl'
+  'dep1',
+  ], function (mymodule, dep1) {
+  'use strict';
+
+  // Do stuff 
+});
+````
+
+then when running the unit test, `mymodule-impl` will be resolved to `/scripts/mymodule.js`, and `dep1` will resolve to `/test/unit/mocks/dep1.mock.js`.
