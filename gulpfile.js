@@ -20,9 +20,9 @@ gulp.task('rjs-build', function () {
     name: '../bower_components/almond/almond',
     mainConfigFile: 'src/requirejs-config.js',
     out: 'requirejs-spec.js',
-    include: ['test'],
+    include: ['globals-exporter-self-executing'],
+    insertRequire: ['globals-exporter-self-executing'],
     wrap: true,
-    insertRequire: ['test']
   })
   .pipe(gulp.dest('./'));
 });
