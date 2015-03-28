@@ -25,7 +25,7 @@ define([
           object = wrappedExport.get();
         });
 
-        it('should be an object allows access to the original object\'s properties', function () {
+        it('should be an object that allows access to the original object\'s properties', function () {
           _.forOwn(wiredObject, function (value, key) {
             expect(object[key]).toBe(value);
           });
@@ -49,7 +49,7 @@ define([
             });
           });
 
-          it('should be an object allows access to the original object\'s properties', function () {
+          it('should be an object that allows access to the original object\'s properties', function () {
             _.forOwn(newWiredObject, function (value, key) {
               expect(object[key]).toBe(value);
             });
