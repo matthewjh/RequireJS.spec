@@ -49,7 +49,7 @@ define([
             });
           });
 
-          it('should be an object that allows access to the original object\'s properties', function () {
+          it('should be an object that allows access to the new object\'s properties', function () {
             _.forOwn(newWiredObject, function (value, key) {
               expect(object[key]).toBe(value);
             });
@@ -61,6 +61,8 @@ define([
 
           beforeEach(function () {
             wiredFunction = sinon.stub();
+            wiredFunction.a = 6;
+
             wrappedExport.wireTo(wiredFunction);
           });
 
@@ -68,6 +70,12 @@ define([
             object(1, 2, 3);
 
             expect(wiredFunction.withArgs(1, 2, 3).callCount).toBe(1);
+          });
+
+          it('should be an object that allows access to the wired function\'s properties', function () {
+            _.forOwn(wiredFunction, function (value, key) {
+              expect(object[key]).toBe(value);
+            });
           });
         });
       });
