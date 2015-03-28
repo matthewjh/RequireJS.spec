@@ -27,7 +27,8 @@ define([
       //   exportObject.wireTo(actualExport);
       // });
 
-      factory.apply(factoryContext, factoryArguments);
+      actualExport = factory.apply(factoryContext, factoryArguments);
+      exportObject.wireTo(actualExport);
 
       return exportObject.get();
     };
