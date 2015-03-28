@@ -57,11 +57,15 @@ define([
         });
 
         describe('after wiring to a function', function () {
-          var wiredFunction;
+          var wiredFunction,
+              wiredFunctionReturnValue;
 
           beforeEach(function () {
             wiredFunction = sinon.stub();
             wiredFunction.a = 6;
+
+            wiredFunctionReturnValue = {};
+            wiredFunction.returns(wiredFunctionReturnValue);
 
             wrappedExport.wireTo(wiredFunction);
           });
@@ -70,6 +74,14 @@ define([
             object(1, 2, 3);
 
             expect(wiredFunction.withArgs(1, 2, 3).callCount).toBe(1);
+          });
+
+          it('should return the same value as the wired function when called', function () {
+            var returnValue;
+
+            returnValue = object();
+
+            expect(returnValue).toBe(wiredFunctionReturnValue);
           });
 
           it('should be an object that allows access to the wired function\'s properties', function () {

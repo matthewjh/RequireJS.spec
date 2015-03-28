@@ -18,7 +18,8 @@ define([
 
       // Call through to prototype
       prototype = Object.getPrototypeOf(ghostObject);
-      prototype.apply(this, arguments);
+
+      return prototype.apply(this, arguments);
     };
   };
 
