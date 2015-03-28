@@ -12261,11 +12261,95 @@ define('config',[], function () {
   };
 })
 ;
+/*
+* Wraps a module export.
+*/
+
+define('wrappers/Export',[
+  ], function () {
+  
+
+  var Export;
+
+  Export = function () {
+    var ghostObject;
+
+    // The ghost object has to be a function in case the export
+    // is wired up to a function.
+    this._ghostObject = ghostObject = function () {
+      var prototype;
+
+      // Call through to prototype
+      prototype = Object.getPrototypeOf(ghostObject);
+      prototype.apply(this, arguments);
+    };
+  };
+
+  Export.prototype.get = function () {
+    return this._ghostObject;
+  };
+
+  Export.prototype.wireTo = function (object) {
+    this._ghostObject.__proto__ = object;
+  };
+
+  return Export;
+});
+
+/*
+* Module returning the corresponding 'beforeTest(callback)' function for the current test framework.
+*/
+
+define('test-framework/run-before-test',[
+  'window'
+  ], function (window) {
+  
+
+  // Only implemented for Karma at the moment.
+
+  return window.beforeEach;
+});
+
+/*
+* Wraps a module factory function.
+*/
+
+define('wrappers/factory',[
+  'wrappers/Export',
+  'test-framework/run-before-test'
+  ], function (Export, runBeforeTest) {
+  
+
+  return function (factory) {
+    return function () {
+      var exportObject,
+          factoryArguments,
+          factoryContext;
+
+      factoryArguments = Array.prototype.slice.call(arguments);
+      exportObject = new Export();
+      factoryContext = this;
+
+      // Before every test, get a fresh export and wire it up to the wrapped export
+      runBeforeTest(function () {
+        var actualExport;
+
+        actualExport = factory.apply(factoryContext, factoryArguments);
+
+        exportObject.wireTo(actualExport);
+      });
+
+      return exportObject.get();
+    };
+  };
+});
+
 define('wrappers/define',[
   'lodash',
   'original-define',
-  'config'
-  ], function (_, originalDefine, config) {
+  'config',
+  'wrappers/factory'
+  ], function (_, originalDefine, config, wrapFactory) {
   
   var defineWrapper,
       isDependencyExcludedFromMocking,
@@ -12312,6 +12396,8 @@ define('wrappers/define',[
     if (dependencies) {
       mapDependencies(dependencies);
     }
+
+    factory = wrapFactory(factory);
 
     // We have to do this because originalDefine will break if we pass it null arguments
     originalDefineArguments = [id, dependencies, factory];
