@@ -32,15 +32,15 @@ define([
         });
 
         describe('after wiring to a different object', function () {
-          var newWireObject;
+          var newWiredObject;
 
           beforeEach(function () {
-            newWireObject = {
+            newWiredObject = {
               a: 6,
               b: 2,
               c: 'hello'
             };
-            wrappedExport.wireTo(newWireObject);
+            wrappedExport.wireTo(newWiredObject);
           });
 
           it('should no longer be an object allows access to the original object\'s properties', function () {
@@ -50,9 +50,24 @@ define([
           });
 
           it('should be an object allows access to the original object\'s properties', function () {
-            _.forOwn(newWireObject, function (value, key) {
+            _.forOwn(newWiredObject, function (value, key) {
               expect(object[key]).toBe(value);
             });
+          });
+        });
+
+        describe('after wiring to a function', function () {
+          var wiredFunction;
+
+          beforeEach(function () {
+            wiredFunction = sinon.stub();
+            wrappedExport.wireTo(wiredFunction);
+          });
+
+          it('should call through to the wired function when called', function () {
+            object(1, 2, 3);
+
+            expect(wiredFunction.withArgs(1, 2, 3).callCount).toBe(1);
           });
         });
       });
