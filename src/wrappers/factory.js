@@ -10,11 +10,11 @@ define([
 
   return function (factory) {
     return function () {
-      var argumentsArray,
-          exportObject,
+      var exportObject,
+          factoryArguments,
           factoryContext;
 
-      argumentsArray = Array.prototype.slice.call(arguments);
+      factoryArguments = Array.prototype.slice.call(arguments);
       exportObject = new Export();
       factoryContext = this;
 
@@ -22,7 +22,7 @@ define([
       runBeforeTest(function () {
         var actualExport;
 
-        actualExport = factory.apply(factoryContext, argumentsArray);
+        actualExport = factory.apply(factoryContext, factoryArguments);
 
         exportObject.wireTo(actualExport);
       });
