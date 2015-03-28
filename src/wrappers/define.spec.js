@@ -1,15 +1,20 @@
 define([
   'wrappers/define-impl',
+  'wrappers/factory',
   'original-define',
   'config'
-  ], function (defineWrapper, originalDefine, config) {
+  ], function (defineWrapper, wrapFactory, originalDefine, config) {
   'use strict';
 
   describe('define wrapper', function () {
-    var noOpFactory;
+    var noOpFactory,
+        wrappedNoOpFactory;
 
     beforeEach(function () {
       noOpFactory = function () {};
+      wrappedNoOpFactory = function () {};
+
+      wrapFactory.withArgs(noOpFactory).returns(wrappedNoOpFactory);
     });
 
     it('should preserve access to the amd property', function () {
@@ -20,7 +25,7 @@ define([
       it('should call originalDefine with the factory function', function () {
         defineWrapper(noOpFactory);
 
-        expect(originalDefine.withArgs(noOpFactory).callCount).toBe(1);
+        expect(originalDefine.withArgs(wrappedNoOpFactory).callCount).toBe(1);
       });
     });
 
@@ -32,7 +37,7 @@ define([
 
         defineWrapper(id, noOpFactory);
 
-        expect(originalDefine.withArgs(id, noOpFactory).callCount).toBe(1);
+        expect(originalDefine.withArgs(id, wrappedNoOpFactory).callCount).toBe(1);
       });
     });
 
@@ -44,7 +49,7 @@ define([
 
         defineWrapper(dependencies, noOpFactory);
 
-        expect(originalDefine.withArgs(dependencies, noOpFactory).callCount).toBe(1);
+        expect(originalDefine.withArgs(dependencies, wrappedNoOpFactory).callCount).toBe(1);
       });
     });
 
@@ -58,7 +63,7 @@ define([
 
         defineWrapper(id, dependencies, noOpFactory);
 
-        expect(originalDefine.withArgs(id, dependencies, noOpFactory).callCount).toBe(1);
+        expect(originalDefine.withArgs(id, dependencies, wrappedNoOpFactory).callCount).toBe(1);
       });
     });
 
@@ -79,7 +84,7 @@ define([
 
         defineWrapper(id, dependencies, noOpFactory);
 
-        expect(originalDefine.withArgs(id, resolvedDependencies, noOpFactory).callCount).toBe(1);
+        expect(originalDefine.withArgs(id, resolvedDependencies, wrappedNoOpFactory).callCount).toBe(1);
       });
     });
   });

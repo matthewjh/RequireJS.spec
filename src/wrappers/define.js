@@ -1,8 +1,9 @@
 define([
   'lodash',
   'original-define',
-  'config'
-  ], function (_, originalDefine, config) {
+  'config',
+  'wrappers/factory'
+  ], function (_, originalDefine, config, wrapFactory) {
   'use strict';
   var defineWrapper,
       isDependencyExcludedFromMocking,
@@ -49,6 +50,8 @@ define([
     if (dependencies) {
       mapDependencies(dependencies);
     }
+
+    factory = wrapFactory(factory);
 
     // We have to do this because originalDefine will break if we pass it null arguments
     originalDefineArguments = [id, dependencies, factory];
