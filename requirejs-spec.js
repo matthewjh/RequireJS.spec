@@ -12322,7 +12322,8 @@ define('wrappers/factory',[
 
   return function (factory) {
     return function () {
-      var exportObject,
+      var actualExport,
+          exportObject,
           factoryArguments,
           factoryContext;
 
