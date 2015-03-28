@@ -10,15 +10,11 @@ define([
     'mockPath',
     'implRegex',
     'mockSuffix',
-    'alwaysUseImpl'
+    'neverMock'
   ];
 
   requireConfigWrapper = function (requireConfig) {
-    for (var property in requireConfig) {
-      if (requireConfig.hasOwnProperty(property)) {
-        config[property] = requireConfig[property];
-      }
-    };
+    _.assign(config, requireConfig);
 
     // Delete our custom properties before forwarding the config to require.config
     // in case they cause any issues.

@@ -57,7 +57,8 @@ Object.keys(window.__karma__.files).forEach(function (file) {
 require.config({
   baseUrl: '/base/src',
   paths: {
-    'sinon': '../bower_components/sinon/index'
+    'sinon': '../bower_components/sinon/index',
+    'lodash': '../bower_components/lodash/lodash'
   },
   shim: {
     'sinon': {

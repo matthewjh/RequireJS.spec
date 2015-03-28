@@ -1,14 +1,15 @@
 define([
+  'lodash',
   'original-define',
   'config'
-  ], function (originalDefine, config) {
+  ], function (_, originalDefine, config) {
   'use strict';
   var defineWrapper,
       isDependencyExcludedFromMocking,
       mapDependencies;
 
   isDependencyExcludedFromMocking = function (dependency) {
-    return config.alwaysUseImpl.indexOf(dependency) >= 0;
+    return _.contains(config.neverMock, dependency);
   };
 
   // Map each 'IMPL-id' to 'id' and each 'id' to 'mockPath/id.mock'
@@ -28,19 +29,19 @@ define([
     var originalDefineArguments;
 
     // When called with 'id' and 'dependencies' omitted
-    if (id.constructor === Function) {
+    if (_.isFunction(id)) {
       factory = id;
       id = null;
       dependencies = null;
     } // When called with 'id' omitted
-      else if (id.constructor === Array) {
+      else if (_.isArray(id)) {
       factory = dependencies;
       dependencies = id;
       id = null;
     }
 
     // When called with 'dependencies' omitted
-    if (dependencies && dependencies.constructor && dependencies.constructor === Function) {
+    if (_.isFunction(dependencies)) {
       factory = dependencies;
       dependencies = null;
     }
@@ -50,11 +51,9 @@ define([
     }
 
     // We have to do this because originalDefine will break if we pass it null arguments
-    originalDefineArguments = [];
-    [id, dependencies, factory].forEach(function (argument) {
-      if (argument) {
-        originalDefineArguments.push(argument);
-      }
+    originalDefineArguments = [id, dependencies, factory];
+    _.remove(originalDefineArguments, function (argument) {
+      return !argument;
     });
 
     originalDefine.apply(null, originalDefineArguments);

@@ -12,8 +12,8 @@ define([
       expect(config.mockSuffix).toEqual('.mock');
     });
 
-    it('should have the default alwaysUseImpl list', function () {
-      expect(config.alwaysUseImpl).toEqual([]);
+    it('should have the default neverMock list', function () {
+      expect(config.neverMock).toEqual([]);
     });
   });
 })

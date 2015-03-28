@@ -433,7 +433,7 @@ var requirejs, require, define;
 define("../bower_components/almond/almond", function(){});
 
 define('window',[], function () {
-  
+
 
   return window;
 });
@@ -441,19 +441,19 @@ define('window',[], function () {
 define('original-define',[
   'window',
   ], function (window) {
-  
+
 
   return window.define;
 });
 
 define('config',[], function () {
-  
+
 
   return {
     //Default values
     implRegex: /^impl\~/,
     mockSuffix: '.mock',
-    alwaysUseImpl: []
+    neverMock: []
   };
 })
 ;
@@ -461,13 +461,13 @@ define('wrappers/define',[
   'original-define',
   'config'
   ], function (originalDefine, config) {
-  
+
   var defineWrapper,
       isDependencyExcludedFromMocking,
       mapDependencies;
 
   isDependencyExcludedFromMocking = function (dependency) {
-    return config.alwaysUseImpl.indexOf(dependency) >= 0;
+    return config.neverMock.indexOf(dependency) >= 0;
   };
 
   // Map each 'IMPL-id' to 'id' and each 'id' to 'mockPath/id.mock'
@@ -528,7 +528,7 @@ define('wrappers/define',[
 define('original-require',[
   'window',
   ], function (window) {
-  
+
 
   return window.require;
 });
@@ -537,7 +537,7 @@ define('wrappers/require.config',[
   'original-require',
   'config'
   ], function (originalRequire, config) {
-  
+
   var customProperties,
       requireConfigWrapper;
 
@@ -545,7 +545,7 @@ define('wrappers/require.config',[
     'mockPath',
     'implRegex',
     'mockSuffix',
-    'alwaysUseImpl'
+    'neverMock'
   ];
 
   requireConfigWrapper = function (requireConfig) {
@@ -571,7 +571,7 @@ define('wrappers/require',[
   'original-require',
   'wrappers/require.config'
   ], function (originalRequire, requireConfigWrapper) {
-  
+
   var requireWrapper;
 
   requireWrapper = function () {
@@ -591,7 +591,7 @@ define('globals-exporter',[
   'wrappers/define',
   'wrappers/require'
   ], function (window, wrappedDefine, wrappedRequire) {
-  
+
 
   return function () {
     window.define = wrappedDefine;
@@ -602,7 +602,7 @@ define('globals-exporter',[
 define('globals-exporter-self-executing',[
   'globals-exporter'
   ], function (globalsExporter) {
-  
+
 
   globalsExporter();
 });

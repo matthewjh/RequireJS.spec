@@ -1,3 +1,6 @@
 require.config({
-    baseUrl: './'
+    baseUrl: './',
+    paths: {
+      'lodash': '../bower_components/lodash/lodash'
+    }
  });
