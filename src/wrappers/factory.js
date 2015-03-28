@@ -3,8 +3,9 @@
 */
 
 define([
-  'wrappers/Export'
-  ], function (Export) {
+  'wrappers/Export',
+  'test-framework/run-before-test'
+  ], function (Export, runBeforeTest) {
   'use strict';
 
   return function (factory) {
@@ -12,6 +13,10 @@ define([
       var exportObject;
 
       factory.apply(this, arguments);
+
+      runBeforeTest(function () {
+
+      });
 
       exportObject = new Export();
 

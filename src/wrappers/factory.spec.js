@@ -1,8 +1,9 @@
 define([
   'wrappers/factory-impl',
   'wrappers/Export',
+  'test-framework/run-before-test',
   'sinon'
-  ], function (wrapFactory, Export, sinon) {
+  ], function (wrapFactory, Export, runBeforeTest, sinon) {
     'use strict';
 
     describe('a wrapped factory function', function () {
@@ -33,6 +34,12 @@ define([
       });
 
       describe('when called', function () {
+        it('should add a runBeforeTest callback', function () {
+          wrappedFactory();
+
+          expect(runBeforeTest.withArgs(sinon.match.func).callCount).toBe(1);
+        });
+
         it('should call through to the original factory', function () {
           wrappedFactory(1, 2, 3);
 
