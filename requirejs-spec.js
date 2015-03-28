@@ -12331,13 +12331,15 @@ define('wrappers/factory',[
       factoryContext = this;
 
       // Before every test, get a fresh export and wire it up to the wrapped export
-      runBeforeTest(function () {
-        var actualExport;
+      // runBeforeTest(function () {
+      //   var actualExport;
 
-        actualExport = factory.apply(factoryContext, factoryArguments);
+      //   actualExport = factory.apply(factoryContext, factoryArguments);
 
-        exportObject.wireTo(actualExport);
-      });
+      //   exportObject.wireTo(actualExport);
+      // });
+
+      factory.apply(factoryContext, factoryArguments);
 
       return exportObject.get();
     };
