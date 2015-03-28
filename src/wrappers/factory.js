@@ -10,15 +10,22 @@ define([
 
   return function (factory) {
     return function () {
-      var exportObject;
+      var argumentsArray,
+          exportObject,
+          factoryContext;
 
-      factory.apply(this, arguments);
-
-      runBeforeTest(function () {
-
-      });
-
+      argumentsArray = Array.prototype.slice.call(arguments);
       exportObject = new Export();
+      factoryContext = this;
+
+      // Before every test, get a fresh export and wire it up to the wrapped export
+      runBeforeTest(function () {
+        var actualExport;
+
+        actualExport = factory.apply(factoryContext, argumentsArray);
+
+        exportObject.wireTo(actualExport);
+      });
 
       return exportObject.get();
     };
