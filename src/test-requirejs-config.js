@@ -17,7 +17,7 @@ implModuleSuffix = '-impl';
 implFileRegex = /^\/base\/src.*\.js$/i;
 mockModulesPath = '../test/unit/mocks/';
 mockModuleSuffix = '.mock';
-testFileRegex = /(spec|test)\.js$/i;
+testFileRegex = /spec\.js$/i;
 
 getPathToModule = function getPathToModule (path) {
   return path.replace(/^\/base\/src\//, '').replace(/\.js$/, '');

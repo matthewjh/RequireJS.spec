@@ -1,8 +1,13 @@
 /*
-* Module returning the 'beforeTest(callback)' function appropriate for the current test framework.
+* Module returning the corresponding 'beforeTest(callback)' function for the current test framework.
 */
 
 define([
-  ], function () {
+  'window'
+  ], function (window) {
   'use strict';
+
+  // Only implemented for Karma at the moment.
+
+  return window.beforeEach;
 });
