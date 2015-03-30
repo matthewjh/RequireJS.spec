@@ -20,14 +20,13 @@ define([
         factory.returns(actualModuleExport);
         wrappedFactory = wrapFactory(factory);
 
-        exportObject = {
-          get: sinon.stub(),
-          wireTo: sinon.stub()
-        };
         exportObjectGetValue = {};
-        exportObject.get.returns(exportObjectGetValue);
-
+        exportObject = {
+          get: sinon.stub()
+        };
+        exportObject.get.returns(exportObject);
         exportFactory.returns(exportObject);
+
       });
 
       it('should return the value of exportObject.get()', function () {
@@ -39,26 +38,6 @@ define([
           wrappedFactory();
 
           expect(runBeforeTest.withArgs(sinon.match.func).callCount).toBe(1);
-        });
-
-        describe('when the runBeforeTest callback is called', function () {
-          beforeEach(function () {
-            actualModuleExport = {};
-            factory.withArgs(1, 2, 3).returns(actualModuleExport)
-
-            wrappedFactory(1, 2, 3);
-            runBeforeTest.callArg(0);
-          });
-
-          it('should call through to the original factory', function () {
-            wrappedFactory(1, 2, 3);
-
-            expect(factory.withArgs(1, 2, 3).callCount).toBe(1);
-          });
-
-          it('should wire the export to the return value of the factory', function () {
-            expect(exportObject.wireTo.withArgs(actualModuleExport).callCount).toBe(1);
-          });
         });
       });
     });

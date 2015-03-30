@@ -9,29 +9,16 @@ define([
   'use strict';
 
   return function wrapFactory (factory) {
-    return function () {
-      var actualExport,
-          exportObject,
-          factoryArguments,
-          factoryContext;
+    return function (module) {
+      var deps = Array.prototype.slice.call(arguments);
 
-      factoryArguments = Array.prototype.slice.call(arguments);
-      exportObject = exportFactory();
-      factoryContext = this;
+      console.log(module.id);
 
-      // Before every test, get a fresh export and wire it up to the wrapped export
-      // runBeforeTest(function () {
-      //   var actualExport;
+      // Remove 'module' dependency
+      deps.shift();
 
-      //   actualExport = factory.apply(factoryContext, factoryArguments);
-
-      //   exportObject.wireTo(actualExport);
-      // });
-
-      actualExport = factory.apply(factoryContext, factoryArguments);
-      exportObject.wireTo(actualExport);
-
-      return exportObject.get();
+      return factory.apply(null, deps);
     };
   };
 });
+

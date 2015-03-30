@@ -49,6 +49,7 @@ define([
 
     if (dependencies) {
       mapDependencies(dependencies);
+      dependencies.unshift('module');
     }
 
     factory = wrapFactory(factory);

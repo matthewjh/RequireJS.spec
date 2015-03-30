@@ -12265,36 +12265,25 @@ define('config',[], function () {
 * Wraps a module export.
 */
 
-define('wrappers/Export',[
+define('wrappers/export-factory',[
   ], function () {
   
 
-  var Export;
+  return function exportFactory (getter) {
+    var exportValue;
 
-  Export = function () {
-    var ghostObject;
+    exportValue = getter();
 
-    // The ghost object has to be a function in case the export
-    // is wired up to a function.
-    this._ghostObject = ghostObject = function () {
-      var prototype;
+    return {
+      get: function () {
+        return exportValue;
+      },
 
-      // Call through to prototype
-      prototype = Object.getPrototypeOf(ghostObject);
-
-      return prototype.apply(this, arguments);
+      reset: function () {
+        exportValue = getter();
+      }
     };
   };
-
-  Export.prototype.get = function () {
-    return this._ghostObject;
-  };
-
-  Export.prototype.wireTo = function (object) {
-    this._ghostObject.__proto__ = object;
-  };
-
-  return Export;
 });
 
 /*
@@ -12316,38 +12305,25 @@ define('test-framework/run-before-test',[
 */
 
 define('wrappers/factory',[
-  'wrappers/Export',
+  'wrappers/export-factory',
   'test-framework/run-before-test'
-  ], function (Export, runBeforeTest) {
+  ], function (exportFactory, runBeforeTest) {
   
 
-  return function (factory) {
-    return function () {
-      var actualExport,
-          exportObject,
-          factoryArguments,
-          factoryContext;
+  return function wrapFactory (factory) {
+    return function (module) {
+      var deps = Array.prototype.slice.call(arguments);
 
-      factoryArguments = Array.prototype.slice.call(arguments);
-      exportObject = new Export();
-      factoryContext = this;
+      console.log(module.id);
 
-      // Before every test, get a fresh export and wire it up to the wrapped export
-      // runBeforeTest(function () {
-      //   var actualExport;
+      // Remove 'module' dependency
+      deps.shift();
 
-      //   actualExport = factory.apply(factoryContext, factoryArguments);
-
-      //   exportObject.wireTo(actualExport);
-      // });
-
-      actualExport = factory.apply(factoryContext, factoryArguments);
-      exportObject.wireTo(actualExport);
-
-      return exportObject.get();
+      return factory.apply(null, deps);
     };
   };
 });
+
 
 define('wrappers/define',[
   'lodash',
@@ -12400,6 +12376,7 @@ define('wrappers/define',[
 
     if (dependencies) {
       mapDependencies(dependencies);
+      dependencies.unshift('module');
     }
 
     factory = wrapFactory(factory);
