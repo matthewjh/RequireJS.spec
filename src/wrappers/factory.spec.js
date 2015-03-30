@@ -1,9 +1,9 @@
 define([
   'wrappers/factory-impl',
-  'wrappers/Export',
+  'wrappers/export-factory',
   'test-framework/run-before-test',
   'sinon'
-  ], function (wrapFactory, Export, runBeforeTest, sinon) {
+  ], function (wrapFactory, exportFactory, runBeforeTest, sinon) {
     'use strict';
 
     describe('a wrapped factory function', function () {
@@ -27,7 +27,7 @@ define([
         exportObjectGetValue = {};
         exportObject.get.returns(exportObjectGetValue);
 
-        Export.returns(exportObject);
+        exportFactory.returns(exportObject);
       });
 
       it('should return the value of exportObject.get()', function () {

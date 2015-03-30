@@ -3,12 +3,12 @@
 */
 
 define([
-  'wrappers/Export',
+  'wrappers/export-factory',
   'test-framework/run-before-test'
-  ], function (Export, runBeforeTest) {
+  ], function (exportFactory, runBeforeTest) {
   'use strict';
 
-  return function (factory) {
+  return function wrapFactory (factory) {
     return function () {
       var actualExport,
           exportObject,
@@ -16,7 +16,7 @@ define([
           factoryContext;
 
       factoryArguments = Array.prototype.slice.call(arguments);
-      exportObject = new Export();
+      exportObject = exportFactory();
       factoryContext = this;
 
       // Before every test, get a fresh export and wire it up to the wrapped export
