@@ -1,8 +1,9 @@
 define([
   'wrappers/export-factory-impl',
   'test-framework/run-before-test',
+  'logger',
   'sinon'
-  ], function (exportFactory, runBeforeTest, sinon) {
+  ], function (exportFactory, runBeforeTest, logger, sinon) {
     'use strict';
 
     describe('export object', function () {
@@ -15,6 +16,20 @@ define([
         getter = sinon.stub();
         getter.returns(object);
         exportObject = exportFactory(getter);
+      });
+
+      it('should log when exporting an undefined value', function () {
+        var exportObject;
+
+        exportObject = exportFactory(function () {
+          return undefined;
+        });
+
+        runBeforeTest.callArg(0);
+
+        exportObject.get();
+
+        expect(logger.callCount).toBe(1);
       });
 
       describe('.get', function () {

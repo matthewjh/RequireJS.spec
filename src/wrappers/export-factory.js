@@ -3,8 +3,10 @@
 */
 
 define([
-  'test-framework/run-before-test'
-  ], function (runBeforeTest) {
+  'lodash',
+  'test-framework/run-before-test',
+  'logger',
+  ], function (_, runBeforeTest, logger) {
   'use strict';
 
   return function exportFactory (getter) {
@@ -14,7 +16,7 @@ define([
     dirty = true;
 
     runBeforeTest(function () {
-      dirty = true;
+      dirty = true
     });
 
     return {
@@ -22,6 +24,10 @@ define([
         if (dirty) {
           exportValue = getter();
           dirty = false;
+        }
+
+        if (_.isUndefined(exportValue)) {
+          logger('WARNING: exporting undefined');
         }
 
         return exportValue;
