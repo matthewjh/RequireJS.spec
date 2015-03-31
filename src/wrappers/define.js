@@ -3,7 +3,8 @@ define([
   'original-define',
   'config',
   'wrappers/factory'
-  ], function (_, originalDefine, config, wrapFactory) {
+  'logger'
+  ], function (_, originalDefine, config, wrapFactory, logger) {
   'use strict';
   var defineWrapper,
       isDependencyExcludedFromMocking,
@@ -28,6 +29,10 @@ define([
 
   defineWrapper = function (id, dependencies, factory) {
     var originalDefineArguments;
+
+    if (config.verboseMode) {
+      logger('define', id, dependencies, factory);
+    }
 
     // When called with 'id' and 'dependencies' omitted
     if (_.isFunction(id)) {
