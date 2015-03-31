@@ -12257,35 +12257,11 @@ define('config',[], function () {
     //Default values
     implRegex: /^impl\~/,
     mockSuffix: '.mock',
-    neverMock: []
+    neverMock: [],
+    specRegex: /\.spec$/
   };
 })
 ;
-/*
-* Wraps a module export.
-*/
-
-define('wrappers/export-factory',[
-  ], function () {
-  
-
-  return function exportFactory (getter) {
-    var exportValue;
-
-    exportValue = getter();
-
-    return {
-      get: function () {
-        return exportValue;
-      },
-
-      reset: function () {
-        exportValue = getter();
-      }
-    };
-  };
-});
-
 /*
 * Module returning the corresponding 'beforeTest(callback)' function for the current test framework.
 */
@@ -12301,25 +12277,74 @@ define('test-framework/run-before-test',[
 });
 
 /*
+* Wraps a module export.
+*/
+
+define('wrappers/export-factory',[
+  'test-framework/run-before-test'
+  ], function (runBeforeTest) {
+  
+
+  return function exportFactory (getter) {
+    var dirty,
+        exportValue;
+
+    dirty = true;
+
+    runBeforeTest(function () {
+      dirty = true;
+    });
+
+    return {
+      get: function () {
+        if (dirty) {
+          exportValue = getter();
+          dirty = false;
+        }
+
+        return exportValue;
+      }
+    };
+  };
+});
+
+/*
 * Wraps a module factory function.
 */
 
 define('wrappers/factory',[
   'wrappers/export-factory',
-  'test-framework/run-before-test'
-  ], function (exportFactory, runBeforeTest) {
+  'test-framework/run-before-test',
+  'config'
+  ], function (exportFactory, runBeforeTest, config) {
   
 
   return function wrapFactory (factory) {
     return function (module) {
-      var deps = Array.prototype.slice.call(arguments);
+      var deps,
+          exportValue;
 
-      console.log(module.id);
+      deps = Array.prototype.slice.call(arguments);
 
       // Remove 'module' dependency
       deps.shift();
 
-      return factory.apply(null, deps);
+      if (config.specRegex.test(module.id)) {
+        // If the module is a spec, we don't want to wrap the export
+        exportValue = factory.apply(null, deps);
+      } else {
+        exportValue = exportFactory(function () {
+          var gottenDeps = [];
+
+          deps.forEach(function (dep) {
+            gottenDeps.push(dep.get());
+          });
+
+          return factory.apply(null, gottenDeps);
+        });
+      }
+
+      return exportValue;
     };
   };
 });
@@ -12376,6 +12401,8 @@ define('wrappers/define',[
 
     if (dependencies) {
       mapDependencies(dependencies);
+
+      // Add module as a dependency so that our factory wrapper can inspect the module id
       dependencies.unshift('module');
     }
 
