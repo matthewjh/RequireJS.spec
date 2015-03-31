@@ -8,9 +8,11 @@ define([
 
     describe('a wrapped factory function', function () {
       var actualModuleExport,
-          exportObject,
-          exportObjectGetValue,
+          dependency1,
+          dependency2,
+          dependencies,
           factory,
+          wrappedExport,
           wrappedFactory;
 
       beforeEach(function () {
@@ -20,25 +22,69 @@ define([
         factory.returns(actualModuleExport);
         wrappedFactory = wrapFactory(factory);
 
-        exportObjectGetValue = {};
-        exportObject = {
+        wrappedExport = {
           get: sinon.stub()
         };
-        exportObject.get.returns(exportObject);
-        exportFactory.returns(exportObject);
+        exportFactory.returns(wrappedExport);
 
+        dependency1 = {
+          get: function () {
+            return 'dependency-1';
+          }
+        };
+
+        dependency2 = {
+          get: function () {
+            return 'dependency-2';
+          }
+        };
       });
 
-      it('should return the value of exportObject.get()', function () {
-        expect(wrappedFactory()).toBe(exportObjectGetValue);
-      });
+      describe('when the module is a spec', function () {
+        var specModule;
 
-      describe('when called', function () {
-        it('should add a runBeforeTest callback', function () {
-          wrappedFactory();
+        beforeEach(function () {
+          specModule = {
+            id: 'some-module-id.spec'
+          };
+        });
 
-          expect(runBeforeTest.withArgs(sinon.match.func).callCount).toBe(1);
+        it('should call through to the wrapped factory with the correct dependencies', function () {
+          var exportValue = wrappedFactory(specModule, dependency1, dependency2);
+
+          expect(factory.withArgs(dependency1, dependency2).callCount).toBe(1);
+          expect(exportValue).toBe(actualModuleExport);
         });
       });
+
+      describe('when the module isn\'t a test spec', function () {
+        var module;
+
+        beforeEach(function () {
+          module = {
+            id: 'some-module-id'
+          };
+        });
+
+        it('should return a wrapped export', function () {
+          var exportObject = wrappedFactory(module);
+
+          expect(exportObject).toBe(wrappedExport);
+        });
+
+        describe('the export getter function passed to exportFactory', function () {
+          it('should call through to the wrapped factory with the correct dependencies', function () {
+            var getterReturnValue;
+
+            wrappedFactory(module, dependency1, dependency2);
+
+            getterReturnValue = exportFactory.firstCall.args[0]();
+
+            expect(factory.withArgs(dependency1.get(), dependency2.get()).callCount).toBe(1);
+            expect(getterReturnValue).toBe(actualModuleExport);
+          });
+        });
+      });
+
     });
   });
