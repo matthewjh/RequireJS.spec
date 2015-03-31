@@ -2,7 +2,7 @@ define([
   'lodash',
   'original-define',
   'config',
-  'wrappers/factory'
+  'wrappers/factory',
   'logger'
   ], function (_, originalDefine, config, wrapFactory, logger) {
   'use strict';
@@ -30,9 +30,7 @@ define([
   defineWrapper = function (id, dependencies, factory) {
     var originalDefineArguments;
 
-    if (config.verboseMode) {
-      logger('define', id, dependencies, factory);
-    }
+    logger('define:', id, dependencies, factory);
 
     // When called with 'id' and 'dependencies' omitted
     if (_.isFunction(id)) {

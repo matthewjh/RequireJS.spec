@@ -1,9 +1,12 @@
 define([
   'window',
-  ], function (window) {
+  'config'
+  ], function (window, config) {
   'use strict';
 
   return function logger () {
-    return window.console.log.apply(window.console, arguments);
+    if (config.verboseMode) {
+      window.console.log.apply(window.console, arguments);
+    }
   };
 });

@@ -19,8 +19,6 @@ define([
     });
 
     it('should log when verbose mode is on', function () {
-      config.verboseMode = true;
-
       defineWrapper();
 
       expect(logger.callCount).toBe(1);

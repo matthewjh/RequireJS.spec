@@ -5,14 +5,23 @@
 define([
   'wrappers/export-factory',
   'test-framework/run-before-test',
+  'logger',
   'config'
-  ], function (exportFactory, runBeforeTest, config) {
+  ], function (exportFactory, runBeforeTest, logger, config) {
   'use strict';
 
   return function wrapFactory (factory) {
     return function (module) {
       var deps,
-          exportValue;
+          exportValue,
+          loggingFactory;
+
+      loggingFactory = function () {
+        logger('factory function for', module.id, 'invoked');
+
+        return factory.apply(null, arguments);
+      };
+
 
       deps = Array.prototype.slice.call(arguments);
 
@@ -21,7 +30,7 @@ define([
 
       if (config.specRegex.test(module.id)) {
         // If the module is a spec, we don't want to wrap the export
-        exportValue = factory.apply(null, deps);
+        exportValue = loggingFactory.apply(null, deps);
       } else {
         exportValue = exportFactory(function () {
           var gottenDeps = [];
@@ -30,7 +39,7 @@ define([
             gottenDeps.push(dep.get());
           });
 
-          return factory.apply(null, gottenDeps);
+          return loggingFactory.apply(null, gottenDeps);
         });
       }
 

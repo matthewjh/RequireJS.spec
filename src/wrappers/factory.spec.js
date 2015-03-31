@@ -2,8 +2,9 @@ define([
   'wrappers/factory-impl',
   'wrappers/export-factory',
   'config',
+  'logger',
   'sinon'
-  ], function (wrapFactory, exportFactory, config, sinon) {
+  ], function (wrapFactory, exportFactory, config, logger, sinon) {
     'use strict';
 
     describe('a wrapped factory function', function () {
@@ -57,6 +58,12 @@ define([
           expect(factory.withArgs(dependency1, dependency2).callCount).toBe(1);
           expect(exportValue).toBe(actualModuleExport);
         });
+
+        it('should log', function () {
+          wrappedFactory(specModule);
+
+          expect(logger.callCount).toBe(1);
+        });
       });
 
       describe('when the module isn\'t a test spec', function () {
@@ -84,6 +91,14 @@ define([
 
             expect(factory.withArgs(dependency1.get(), dependency2.get()).callCount).toBe(1);
             expect(getterReturnValue).toBe(actualModuleExport);
+          });
+
+          it('should log', function () {
+            wrappedFactory(module);
+
+            exportFactory.callArg(0);
+
+            expect(logger.callCount).toBe(1);
           });
         });
       });
