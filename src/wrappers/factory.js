@@ -22,7 +22,6 @@ define([
         return factory.apply(null, arguments);
       };
 
-
       deps = Array.prototype.slice.call(arguments);
 
       // Remove 'module' dependency

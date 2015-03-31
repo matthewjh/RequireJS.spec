@@ -16,7 +16,7 @@ define([
     dirty = true;
 
     runBeforeTest(function () {
-      dirty = true
+      dirty = true;
     });
 
     return {
