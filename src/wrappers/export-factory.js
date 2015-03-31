@@ -24,10 +24,10 @@ define([
         if (dirty) {
           exportValue = getter();
           dirty = false;
-        }
 
-        if (_.isUndefined(exportValue)) {
-          logger('WARNING: exporting undefined');
+          if (_.isUndefined(exportValue)) {
+            logger('WARNING: exporting undefined');
+          }
         }
 
         return exportValue;
