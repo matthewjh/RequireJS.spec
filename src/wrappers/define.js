@@ -49,6 +49,8 @@ define([
 
     if (dependencies) {
       mapDependencies(dependencies);
+
+      // Add module as a dependency so that our factory wrapper can inspect the module id
       dependencies.unshift('module');
     }
 

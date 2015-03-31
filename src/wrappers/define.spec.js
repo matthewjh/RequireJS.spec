@@ -80,7 +80,7 @@ define([
 
         id = 'some-module-id';
         dependencies = ['library', 'impl~unit-under-test', 'unit-not-under-test', 'unit-not-under-test2'];
-        resolvedDependencies = ['library', 'unit-under-test', 'mock/unit-not-under-test.mock.js', 'mock/unit-not-under-test2.mock.js'];
+        resolvedDependencies = ['module', 'library', 'unit-under-test', 'mock/unit-not-under-test.mock.js', 'mock/unit-not-under-test2.mock.js'];
 
         defineWrapper(id, dependencies, noOpFactory);
 
