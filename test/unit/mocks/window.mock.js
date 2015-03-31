@@ -4,6 +4,9 @@ define([
   var windowMock;
 
   windowMock = {
+    console: {
+      log: sinon.stub()
+    },
     require: sinon.stub(),
     define: sinon.stub(),
     beforeEach: sinon.stub()
@@ -13,6 +16,7 @@ define([
   windowMock.define.amd = {};
 
   afterEach(function () {
+    windowMock.console.log.reset();
     windowMock.require.reset();
     windowMock.define.reset();
     windowMock.define.amd = {};

@@ -16,6 +16,10 @@ define([
       expect(config.mockSuffix).toEqual('.mock');
     });
 
+    it('should have the default verbose mode flag', function () {
+      expect(config.verboseMode).toEqual(false);
+    });
+
     it('should have the default neverMock list', function () {
       expect(config.neverMock).toEqual([]);
     });

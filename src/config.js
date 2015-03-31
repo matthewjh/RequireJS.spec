@@ -6,6 +6,7 @@ define([], function () {
     implRegex: /^impl\~/,
     mockSuffix: '.mock',
     neverMock: [],
-    specRegex: /\.spec$/
+    specRegex: /\.spec$/,
+    verboseMode: false
   };
 })
