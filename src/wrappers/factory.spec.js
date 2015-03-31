@@ -1,9 +1,9 @@
 define([
   'wrappers/factory-impl',
   'wrappers/export-factory',
-  'test-framework/run-before-test',
+  'config',
   'sinon'
-  ], function (wrapFactory, exportFactory, runBeforeTest, sinon) {
+  ], function (wrapFactory, exportFactory, config, sinon) {
     'use strict';
 
     describe('a wrapped factory function', function () {
@@ -38,6 +38,8 @@ define([
             return 'dependency-2';
           }
         };
+
+        config.specRegex = /\.spec$/;
       });
 
       describe('when the module is a spec', function () {

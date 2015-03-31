@@ -1,7 +1,8 @@
 define([
   'wrappers/export-factory-impl',
+  'test-framework/run-before-test',
   'sinon'
-  ], function (exportFactory, sinon) {
+  ], function (exportFactory, runBeforeTest, sinon) {
     'use strict';
 
     describe('export object', function () {
@@ -17,20 +18,29 @@ define([
       });
 
       describe('.get', function () {
-        it('should return the cached object returned by the getter', function () {
-          expect(exportObject.get()).toBe(object);
+        it('should call the getter once per time that the runBeforeTest callback has been invoked', function () {
+          expect(getter.callCount).toBe(0);
 
-          getter.returns('some-other-object');
-          expect(exportObject.get()).toBe(object);
-        });
+          runBeforeTest.callArg(0);
 
-        it('should return a new object returned by the getter after .reset is called', function () {
-          var otherObject = 'some-other-object';
+          exportObject.get();
+          // Get and cache value
+          expect(getter.callCount).toBe(1);
 
-          getter.returns(otherObject);
+          exportObject.get();
+          // No more calls
+          expect(getter.callCount).toBe(1);
 
-          exportObject.reset();
-          expect(exportObject.get()).toBe(otherObject);
+          // Dirty the value
+          runBeforeTest.callArg(0);
+
+          exportObject.get();
+          // Get and cache value
+          expect(getter.callCount).toBe(2);
+
+          exportObject.get();
+          // No more calls
+          expect(getter.callCount).toBe(2);
         });
       });
     });

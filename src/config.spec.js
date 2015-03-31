@@ -8,6 +8,10 @@ define([
       expect(config.implRegex).toEqual(/^impl\~/);
     });
 
+    it('should have the default spec regex', function () {
+      expect(config.specRegex).toEqual(/\.spec$/);
+    });
+
     it('should have the default mock suffix', function () {
       expect(config.mockSuffix).toEqual('.mock');
     });

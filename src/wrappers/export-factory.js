@@ -3,21 +3,28 @@
 */
 
 define([
-  ], function () {
+  'test-framework/run-before-test'
+  ], function (runBeforeTest) {
   'use strict';
 
   return function exportFactory (getter) {
-    var exportValue;
+    var dirty,
+        exportValue;
 
-    exportValue = getter();
+    dirty = true;
+
+    runBeforeTest(function () {
+      dirty = true;
+    });
 
     return {
       get: function () {
-        return exportValue;
-      },
+        if (dirty) {
+          exportValue = getter();
+          dirty = false;
+        }
 
-      reset: function () {
-        exportValue = getter();
+        return exportValue;
       }
     };
   };
