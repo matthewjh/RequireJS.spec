@@ -9,8 +9,10 @@ define([
   customProperties = [
     'mockPath',
     'implRegex',
+    'specRegex',
     'mockSuffix',
-    'neverMock'
+    'neverMock',
+    'verboseMode'
   ];
 
   requireConfigWrapper = function (requireConfig) {
