@@ -2,9 +2,8 @@ define([
   'wrappers/define-impl',
   'wrappers/factory',
   'original-define',
-  'logger',
   'config'
-  ], function (defineWrapper, wrapFactory, originalDefine, logger, config) {
+  ], function (defineWrapper, wrapFactory, originalDefine, config) {
   'use strict';
 
   describe('define wrapper', function () {
@@ -16,12 +15,6 @@ define([
       wrappedNoOpFactory = function () {};
 
       wrapFactory.withArgs(noOpFactory).returns(wrappedNoOpFactory);
-    });
-
-    it('should log when verbose mode is on', function () {
-      defineWrapper();
-
-      expect(logger.callCount).toBe(1);
     });
 
     it('should preserve access to the amd property', function () {
