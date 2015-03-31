@@ -12258,7 +12258,8 @@ define('config',[], function () {
     implRegex: /^impl\~/,
     mockSuffix: '.mock',
     neverMock: [],
-    specRegex: /\.spec$/
+    specRegex: /\.spec$/,
+    verboseMode: false
   };
 })
 ;
@@ -12276,13 +12277,28 @@ define('test-framework/run-before-test',[
   return window.beforeEach;
 });
 
+define('logger',[
+  'window',
+  'config'
+  ], function (window, config) {
+  
+
+  return function logger () {
+    if (config.verboseMode) {
+      window.console.log.apply(window.console, arguments);
+    }
+  };
+});
+
 /*
 * Wraps a module export.
 */
 
 define('wrappers/export-factory',[
-  'test-framework/run-before-test'
-  ], function (runBeforeTest) {
+  'lodash',
+  'test-framework/run-before-test',
+  'logger',
+  ], function (_, runBeforeTest, logger) {
   
 
   return function exportFactory (getter) {
@@ -12292,7 +12308,7 @@ define('wrappers/export-factory',[
     dirty = true;
 
     runBeforeTest(function () {
-      dirty = true;
+      dirty = true
     });
 
     return {
@@ -12300,6 +12316,10 @@ define('wrappers/export-factory',[
         if (dirty) {
           exportValue = getter();
           dirty = false;
+
+          if (_.isUndefined(exportValue)) {
+            logger('WARNING: exporting undefined');
+          }
         }
 
         return exportValue;
@@ -12315,14 +12335,23 @@ define('wrappers/export-factory',[
 define('wrappers/factory',[
   'wrappers/export-factory',
   'test-framework/run-before-test',
+  'logger',
   'config'
-  ], function (exportFactory, runBeforeTest, config) {
+  ], function (exportFactory, runBeforeTest, logger, config) {
   
 
   return function wrapFactory (factory) {
     return function (module) {
       var deps,
-          exportValue;
+          exportValue,
+          loggingFactory;
+
+      loggingFactory = function () {
+        logger('factory function for', module.id, 'invoked');
+
+        return factory.apply(null, arguments);
+      };
+
 
       deps = Array.prototype.slice.call(arguments);
 
@@ -12331,7 +12360,7 @@ define('wrappers/factory',[
 
       if (config.specRegex.test(module.id)) {
         // If the module is a spec, we don't want to wrap the export
-        exportValue = factory.apply(null, deps);
+        exportValue = loggingFactory.apply(null, deps);
       } else {
         exportValue = exportFactory(function () {
           var gottenDeps = [];
@@ -12340,7 +12369,7 @@ define('wrappers/factory',[
             gottenDeps.push(dep.get());
           });
 
-          return factory.apply(null, gottenDeps);
+          return loggingFactory.apply(null, gottenDeps);
         });
       }
 
@@ -12442,8 +12471,10 @@ define('wrappers/require.config',[
   customProperties = [
     'mockPath',
     'implRegex',
+    'specRegex',
     'mockSuffix',
-    'neverMock'
+    'neverMock',
+    'verboseMode'
   ];
 
   requireConfigWrapper = function (requireConfig) {
