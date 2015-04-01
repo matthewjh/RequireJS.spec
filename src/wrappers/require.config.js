@@ -1,7 +1,8 @@
 define([
+  'lodash',
   'original-require',
   'config'
-  ], function (originalRequire, config) {
+  ], function (_, originalRequire, config) {
   'use strict';
   var customProperties,
       requireConfigWrapper;

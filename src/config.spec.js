@@ -24,4 +24,4 @@ define([
       expect(config.neverMock).toEqual([]);
     });
   });
-})
+});

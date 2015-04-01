@@ -11,7 +11,6 @@ define([
       var actualModuleExport,
           dependency1,
           dependency2,
-          dependencies,
           factory,
           wrappedExport,
           wrappedFactory;

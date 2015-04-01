@@ -7,7 +7,7 @@ define([
   ], function (window) {
   'use strict';
 
-  // Only implemented for Karma at the moment.
+  // Only implemented for Jasmine at the moment.
 
   return window.beforeEach;
 });
