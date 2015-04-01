@@ -1,3 +1,8 @@
+/*
+* Wrapper for requirejs's require.config function.
+*/
+
+
 define([
   'lodash',
   'original-require',

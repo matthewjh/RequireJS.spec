@@ -1,3 +1,8 @@
+/*
+* Wrapper for requirejs's require function.
+*/
+
+
 define([
   'original-require',
   'wrappers/require.config'

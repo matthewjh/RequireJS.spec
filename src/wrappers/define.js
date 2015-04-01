@@ -1,3 +1,7 @@
+/*
+* Wrapper for requirejs's define function.
+*/
+
 define([
   'lodash',
   'original-define',
