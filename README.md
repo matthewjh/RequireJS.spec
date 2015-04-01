@@ -79,10 +79,9 @@ define([
   ], function (myModule, dep1) {
   'use strict';
 
-  var dep1Mock;
-
   describe('myModule', function () {
-    var myModuleExport;
+    var dep1Mock,
+        myModuleExport;
 
     beforeEach(function () {
       // Call .get here to get the actual export value -- this gives flexibility and enables reloading of mocks before every test
