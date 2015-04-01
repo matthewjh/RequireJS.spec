@@ -88,14 +88,14 @@ define([
       // Call .get here to get the actual export value -- this gives flexibility and enables reloading of mocks before every test
       myModuleExport = myModule.get();
       dep1Mock = dep1.get();
+    });
 
-      it('should have some side effect', function () {
-        expect(dep1Mock.someSideAffectingFunction.callCount).toBe(1);
-      });
+    it('should have some side effect', function () {
+      expect(dep1Mock.someSideAffectingFunction.callCount).toBe(1);
+    });
 
-      it('should export 5', function () {
-        expect(myModuleExport).toBe(5);
-      });
+    it('should export 5', function () {
+      expect(myModuleExport).toBe(5);
     });
   });
 });
