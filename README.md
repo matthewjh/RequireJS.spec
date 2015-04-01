@@ -52,9 +52,9 @@ require.config({
 
 ```
 
-Now, given this config, if you were writing unit tests for `/scripts/my-module.js`...
+Now, given this config, if you were writing unit tests for `myModule`...
 
-Implementation file:
+Implementation file `/scripts/my-module.js`:
 
 ```javascript
 define([
