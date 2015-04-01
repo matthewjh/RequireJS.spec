@@ -2,7 +2,7 @@
 
 ## Overview
 
-A work in progress. 
+Both the code and documentation are a work in progress. 
 
 The aim of this project is to make testing large, modular projects written in RequireJS easier. 
 
@@ -11,8 +11,11 @@ To this end RequireJS.spec provides:
 * Exclusion of certain modules (e.g. lodash, sinon) from the above mocking.
 
 TODO:
-* Automatically reload state of module exports (e.g. stub call counters) for every single test.
+* Put on bower.
 * Handle different RequireJS contexts. At present, RequireJS.spec only works if you have a single context.
+* Two different injection modes: auto and manual. Auto is business as usual whereas manual mode means you have to call .get on a module export to get its real export from within spec files.
+* Allow passing through of 'local' injection values via .get({dep1: localDep1, ...}) which will override those in the requirejs registry, so that modules can be substitued for others on an ad-hoc, per test basis.
+
 
 ## Usage
 
@@ -42,7 +45,6 @@ require.config({
 
   // RequireJS.spec config
   mockPath: '/base/test/unit/mocks/',
-  implRegex: /\-impl$/,
   neverMock: [
     'sinon'
   ]
@@ -50,7 +52,7 @@ require.config({
 
 ```
 
-Now, given this config, if you were writing unit tests for `/scripts/mymodule.js`...
+Now, given this config, if you were writing unit tests for `/scripts/my-module.js`...
 
 Implementation file:
 
@@ -60,20 +62,56 @@ define([
   ], function (dep1) {
   'use strict';
 
-  // Do stuff 
+  ...
+
+  dep1.someSideAffectingFunction();
+
+  return 5;
 });
 ````
 
-Unit test file:
+Unit test file `/scripts/my-module.spec.js`:
 
 ```javascript
 define([
-  'mymodule-impl'
-  'dep1',
-  ], function (mymodule, dep1) {
+  'impl~my-module'    // Will be resolved to 'my-module' 
+  'dep1',            // Will be resolved to '{config.mockPath}/dep1.mock'
+  ], function (myModule, dep1) {
   'use strict';
 
-  // Test that mymodule does stuff
+  var dep1Mock;
+
+  describe('myModule', function () {
+    var myModuleExport;
+
+    beforeEach(function () {
+      // Call .get here to get the actual export value -- this gives flexibility and enables reloading of mocks before every test
+      myModuleExport = myModule.get();
+      dep1Mock = dep1.get();
+
+      it('should have some side effect', function () {
+        expect(dep1Mock.someSideAffectingFunction.callCount).toBe(1);
+      });
+
+      it('should export 5', function () {
+        expect(myModuleExport).toBe(5);
+      });
+    });
+  });
+});
+````
+
+Mock file for dep1 `/scripts/test/mock/dep1.mock.js`:
+
+```javascript
+define([
+  'sinon'           // Will be resolved to 'sinon' because it's in the config neverMock array 
+  ], function (sinon) {
+  'use strict';
+
+  return {
+    someSideAffectingFunction: sinon.stub()
+  };
 });
 ````
 
