@@ -23,5 +23,19 @@ define([
     it('should have the default neverMock list', function () {
       expect(config.neverMock).toEqual([]);
     });
+
+    describe('.isExcludedModule', function () {
+      it('should return true for an excluded module id', function () {
+        config.neverMock.push('some-excluded-module');
+
+        expect(config.isExcludedModule('some-excluded-module')).toBe(true);
+      });
+
+      it('should return false for an non-excluded module id', function () {
+        config.neverMock.push('some-excluded-module');
+
+        expect(config.isExcludedModule('some-non-excluded-module')).toBe(false);
+      });
+    });
   });
 });

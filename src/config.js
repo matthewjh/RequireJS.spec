@@ -1,4 +1,6 @@
-define([], function () {
+define([
+  'lodash'
+  ], function (_) {
   'use strict';
 
   return {
@@ -7,6 +9,13 @@ define([], function () {
     mockSuffix: '.mock',
     neverMock: [],
     specRegex: /\.spec$/,
-    verboseMode: false
+    verboseMode: false,
+
+    /*
+     * Returns true if the dependency is excluded from mocking and wrapping as per the neverMock array.
+     */
+    isExcludedModule: function (moduleId) {
+      return _.contains(this.neverMock, moduleId);
+    }
   };
 });
