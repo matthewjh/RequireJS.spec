@@ -1,4 +1,6 @@
-define([], function () {
+define([
+  'sinon'
+  ], function (sinon) {
   'use strict';
 
   var config,
@@ -11,9 +13,12 @@ define([], function () {
         delete config[prop];
       }
     };
+
+    config.isExcludedModule = sinon.stub();
   });
 
   config = {};
+  config.isExcludedModule = sinon.stub();
 
   return config;
 });

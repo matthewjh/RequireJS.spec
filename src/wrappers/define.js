@@ -10,12 +10,7 @@ define([
   ], function (_, originalDefine, config, wrapFactory) {
   'use strict';
   var defineWrapper,
-      isDependencyExcludedFromMocking,
       mapDependencies;
-
-  isDependencyExcludedFromMocking = function (dependency) {
-    return _.contains(config.neverMock, dependency);
-  };
 
   // Map each 'IMPL-id' to 'id' and each 'id' to 'mockPath/id.mock'
   mapDependencies = function (dependencies) {
@@ -23,7 +18,7 @@ define([
       if (config.implRegex.test(dependency)) {
         // Strip impl prefix/suffix
         dependencies[index] = dependency.replace(config.implRegex, '');
-      } else if (!isDependencyExcludedFromMocking(dependency)) {
+      } else if (!config.isExcludedModule(dependency)) {
         // Add mock path and suffix
         dependencies[index] = config.mockPath + dependency + config.mockSuffix + '.js';
       }

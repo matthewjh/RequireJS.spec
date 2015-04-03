@@ -77,6 +77,7 @@ define([
         config.mockPath = 'mock/';
         config.mockSuffix = '.mock';
         config.neverMock = ['library'];
+        config.isExcludedModule.withArgs('library').returns(true);
 
         id = 'some-module-id';
         dependencies = ['library', 'impl~unit-under-test', 'unit-not-under-test', 'unit-not-under-test2'];
