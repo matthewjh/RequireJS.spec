@@ -65,7 +65,31 @@ define([
         });
       });
 
-      describe('when the module isn\'t a test spec', function () {
+      describe('when the module is a library', function () {
+        var specModule;
+
+        beforeEach(function () {
+          config.isExcludedModule.withArgs('library').returns(true);
+          specModule = {
+            id: 'library'
+          };
+        });
+
+        it('should call through to the wrapped factory with the correct dependencies', function () {
+          var exportValue = wrappedFactory(specModule, dependency1, dependency2);
+
+          expect(factory.withArgs(dependency1, dependency2).callCount).toBe(1);
+          expect(exportValue).toBe(actualModuleExport);
+        });
+
+        it('should log', function () {
+          wrappedFactory(specModule);
+
+          expect(logger.callCount).toBe(1);
+        });
+      });
+
+      describe('when the module isn\'t a test spec or a library', function () {
         var module;
 
         beforeEach(function () {
