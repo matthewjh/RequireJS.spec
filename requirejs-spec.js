@@ -12250,7 +12250,9 @@ define('original-define',[
   return window.define;
 });
 
-define('config',[], function () {
+define('config',[
+  'lodash'
+  ], function (_) {
   
 
   return {
@@ -12259,10 +12261,17 @@ define('config',[], function () {
     mockSuffix: '.mock',
     neverMock: [],
     specRegex: /\.spec$/,
-    verboseMode: false
+    verboseMode: false,
+
+    /*
+     * Returns true if the dependency is excluded from mocking and wrapping as per the neverMock array.
+     */
+    isExcludedModule: function (moduleId) {
+      return _.contains(this.neverMock, moduleId);
+    }
   };
-})
-;
+});
+
 /*
 * Module returning the corresponding 'beforeTest(callback)' function for the current test framework.
 */
@@ -12272,7 +12281,7 @@ define('test-framework/run-before-test',[
   ], function (window) {
   
 
-  // Only implemented for Karma at the moment.
+  // Only implemented for Jasmine at the moment.
 
   return window.beforeEach;
 });
@@ -12308,7 +12317,7 @@ define('wrappers/export-factory',[
     dirty = true;
 
     runBeforeTest(function () {
-      dirty = true
+      dirty = true;
     });
 
     return {
@@ -12352,13 +12361,12 @@ define('wrappers/factory',[
         return factory.apply(null, arguments);
       };
 
-
       deps = Array.prototype.slice.call(arguments);
 
       // Remove 'module' dependency
       deps.shift();
 
-      if (config.specRegex.test(module.id)) {
+      if (config.specRegex.test(module.id) || config.isExcludedModule(module.id)) {
         // If the module is a spec, we don't want to wrap the export
         exportValue = loggingFactory.apply(null, deps);
       } else {
@@ -12379,6 +12387,10 @@ define('wrappers/factory',[
 });
 
 
+/*
+* Wrapper for requirejs's define function.
+*/
+
 define('wrappers/define',[
   'lodash',
   'original-define',
@@ -12387,12 +12399,7 @@ define('wrappers/define',[
   ], function (_, originalDefine, config, wrapFactory) {
   
   var defineWrapper,
-      isDependencyExcludedFromMocking,
       mapDependencies;
-
-  isDependencyExcludedFromMocking = function (dependency) {
-    return _.contains(config.neverMock, dependency);
-  };
 
   // Map each 'IMPL-id' to 'id' and each 'id' to 'mockPath/id.mock'
   mapDependencies = function (dependencies) {
@@ -12400,7 +12407,7 @@ define('wrappers/define',[
       if (config.implRegex.test(dependency)) {
         // Strip impl prefix/suffix
         dependencies[index] = dependency.replace(config.implRegex, '');
-      } else if (!isDependencyExcludedFromMocking(dependency)) {
+      } else if (!config.isExcludedModule(dependency)) {
         // Add mock path and suffix
         dependencies[index] = config.mockPath + dependency + config.mockSuffix + '.js';
       }
@@ -12460,10 +12467,16 @@ define('original-require',[
   return window.require;
 });
 
+/*
+* Wrapper for requirejs's require.config function.
+*/
+
+
 define('wrappers/require.config',[
+  'lodash',
   'original-require',
   'config'
-  ], function (originalRequire, config) {
+  ], function (_, originalRequire, config) {
   
   var customProperties,
       requireConfigWrapper;
@@ -12491,6 +12504,11 @@ define('wrappers/require.config',[
 
   return requireConfigWrapper;
 });
+
+/*
+* Wrapper for requirejs's require function.
+*/
+
 
 define('wrappers/require',[
   'original-require',
