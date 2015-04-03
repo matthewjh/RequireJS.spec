@@ -35,7 +35,11 @@ define([
           var gottenDeps = [];
 
           deps.forEach(function (dep) {
-            gottenDeps.push(dep.get());
+            if (config.isExcludedModule(dep)) {
+              gottenDeps.push(dep);
+            } else {
+              gottenDeps.push(dep.get());
+            }
           });
 
           return loggingFactory.apply(null, gottenDeps);

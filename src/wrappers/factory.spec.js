@@ -11,6 +11,7 @@ define([
       var actualModuleExport,
           dependency1,
           dependency2,
+          excludedDependency,
           factory,
           wrappedExport,
           wrappedFactory;
@@ -26,6 +27,9 @@ define([
           get: sinon.stub()
         };
         exportFactory.returns(wrappedExport);
+
+        excludedDependency = 'excluded-dependency';
+        config.isExcludedModule.withArgs('excluded-dependency').returns(true);
 
         dependency1 = {
           get: function () {
@@ -66,24 +70,24 @@ define([
       });
 
       describe('when the module is a library', function () {
-        var specModule;
+        var module;
 
         beforeEach(function () {
           config.isExcludedModule.withArgs('library').returns(true);
-          specModule = {
+          module = {
             id: 'library'
           };
         });
 
         it('should call through to the wrapped factory with the correct dependencies', function () {
-          var exportValue = wrappedFactory(specModule, dependency1, dependency2);
+          var exportValue = wrappedFactory(module, dependency1, dependency2);
 
           expect(factory.withArgs(dependency1, dependency2).callCount).toBe(1);
           expect(exportValue).toBe(actualModuleExport);
         });
 
         it('should log', function () {
-          wrappedFactory(specModule);
+          wrappedFactory(module);
 
           expect(logger.callCount).toBe(1);
         });
@@ -93,6 +97,7 @@ define([
         var module;
 
         beforeEach(function () {
+          config.isExcludedModule.withArgs('some-module-id').returns(false);
           module = {
             id: 'some-module-id'
           };
@@ -108,11 +113,11 @@ define([
           it('should call through to the wrapped factory with the correct dependencies', function () {
             var getterReturnValue;
 
-            wrappedFactory(module, dependency1, dependency2);
+            wrappedFactory(module, dependency1, dependency2, excludedDependency);
 
             getterReturnValue = exportFactory.firstCall.args[0]();
 
-            expect(factory.withArgs(dependency1.get(), dependency2.get()).callCount).toBe(1);
+            expect(factory.withArgs(dependency1.get(), dependency2.get(), excludedDependency).callCount).toBe(1);
             expect(getterReturnValue).toBe(actualModuleExport);
           });
 
