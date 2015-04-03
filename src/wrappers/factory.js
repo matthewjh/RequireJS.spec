@@ -28,7 +28,7 @@ define([
       deps.shift();
 
       if (config.specRegex.test(module.id) || config.isExcludedModule(module.id)) {
-        // If the module is a spec, we don't want to wrap the export
+        // If the module is a spec or excluded, we don't want to wrap the export
         exportValue = loggingFactory.apply(null, deps);
       } else {
         exportValue = exportFactory(function () {
