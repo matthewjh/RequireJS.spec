@@ -12367,14 +12367,18 @@ define('wrappers/factory',[
       deps.shift();
 
       if (config.specRegex.test(module.id) || config.isExcludedModule(module.id)) {
-        // If the module is a spec, we don't want to wrap the export
+        // If the module is a spec or excluded, we don't want to wrap the export
         exportValue = loggingFactory.apply(null, deps);
       } else {
         exportValue = exportFactory(function () {
           var gottenDeps = [];
 
           deps.forEach(function (dep) {
-            gottenDeps.push(dep.get());
+            if (config.isExcludedModule(dep)) {
+              gottenDeps.push(dep);
+            } else {
+              gottenDeps.push(dep.get());
+            }
           });
 
           return loggingFactory.apply(null, gottenDeps);
