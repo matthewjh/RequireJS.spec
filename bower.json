@@ -1,11 +1,12 @@
 {
-  "name": "RequireJS.spec",
-  "version": "0.0.0",
+  "name": "requirejs.spec",
+  "version": "0.0.1",
   "homepage": "https://github.com/matthewjh/RequireJS.spec",
+  "keywords": ["requirejs", "amd", "testing", "mock", "unit test", "stub", "require"],
   "authors": [
     "Matthew Hill"
   ],
-  "main": "main.js",
+  "main": "requirejs-spec.js",
   "moduleType": [
     "globals"
   ],
