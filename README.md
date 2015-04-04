@@ -11,13 +11,23 @@ To this end RequireJS.spec provides:
 * Exclusion of certain modules (e.g. lodash, sinon) from the above mocking.
 
 TODO:
-* Put on bower.
 * Handle different RequireJS contexts. At present, RequireJS.spec only works if you have a single context.
 * Two different injection modes: auto and manual. Auto is business as usual whereas manual mode means you have to call .get on a module export to get its real export from within spec files.
 * Allow passing through of 'local' injection values via .get({dep1: localDep1, ...}) which will override those in the requirejs registry, so that modules can be substitued for others on an ad-hoc, per test basis.
 
+## Installation and Usage
 
-## Usage
+Install via bower
+
+```
+bower install requirejs.spec --save-dev
+```
+
+and then ensure that `bower_components/requirejs.spec/requirejs.spec` is loaded after RequireJS is loaded into your environment and before your tests are run.
+
+Note: Currently only Jasmine is supported.
+
+## Configuration and Examples
 
 In your test RequireJS config, specify the path (absolute -- not relative to the baseUrl) from which to load mock modules with the `mockPath` property.
 
