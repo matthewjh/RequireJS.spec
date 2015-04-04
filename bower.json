@@ -2,7 +2,15 @@
   "name": "requirejs.spec",
   "version": "0.0.1",
   "homepage": "https://github.com/matthewjh/RequireJS.spec",
-  "keywords": ["requirejs", "amd", "testing", "mock", "unit test", "stub", "require"],
+  "keywords": [
+    "requirejs",
+    "amd",
+    "testing",
+    "mock",
+    "unit test",
+    "stub",
+    "require"
+  ],
   "authors": [
     "Matthew Hill"
   ],
@@ -20,6 +28,9 @@
   ],
   "devDependencies": {
     "sinon": "http://sinonjs.org/releases/sinon-1.9.0.js",
+    "lodash": "~3.6.0"
+  },
+  "dependencies": {
     "lodash": "~3.6.0"
   }
 }

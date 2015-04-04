@@ -25,6 +25,9 @@ gulp.task('rjs-build', function () {
     wrap: {
       start: '(function () {',
       end: 'require(\'globals-exporter-self-executing\');' + '})();'
+    },
+    paths: {
+      'lodash': 'empty://'
     }
   })
   .pipe(gulp.dest('./'));
