@@ -12374,10 +12374,10 @@ define('wrappers/factory',[
           var gottenDeps = [];
 
           deps.forEach(function (dep) {
-            if (config.isExcludedModule(dep)) {
-              gottenDeps.push(dep);
-            } else {
+            if (_.isFunction(dep.get)) {
               gottenDeps.push(dep.get());
+            } else {
+              gottenDeps.push(dep);
             }
           });
 
