@@ -12342,11 +12342,12 @@ define('wrappers/export-factory',[
 */
 
 define('wrappers/factory',[
+  'lodash',
   'wrappers/export-factory',
   'test-framework/run-before-test',
   'logger',
   'config'
-  ], function (exportFactory, runBeforeTest, logger, config) {
+  ], function (lodash, exportFactory, runBeforeTest, logger, config) {
   
 
   return function wrapFactory (factory) {
