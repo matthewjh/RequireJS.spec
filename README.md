@@ -23,7 +23,7 @@ Install via bower
 bower install requirejs.spec --save-dev
 ```
 
-and then ensure that `bower_components/requirejs.spec/requirejs.spec` is loaded after RequireJS is loaded into your environment and before your tests are run.
+and then ensure that `bower_components/requirejs.spec/requirejs-spec.js` is loaded after RequireJS is loaded into your environment and before your tests are run.
 
 Note: Currently only Jasmine is supported.
 
