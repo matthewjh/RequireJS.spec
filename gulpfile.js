@@ -26,9 +26,6 @@ gulp.task('rjs-build', function () {
       start: '(function () {',
       end: 'require(\'globals-exporter-self-executing\');' + '})();'
     },
-    paths: {
-      'lodash': 'shim'
-    }
   })
   .pipe(gulp.dest('./'));
 });
