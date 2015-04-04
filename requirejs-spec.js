@@ -438,6 +438,10 @@ define('window',[], function () {
   return window;
 });
 
+define('lodash', [],function () {
+  return window._;
+});
+
 define('original-define',[
   'window',
   ], function (window) {
