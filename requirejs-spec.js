@@ -12321,6 +12321,9 @@ define('wrappers/export-factory',[
     });
 
     return {
+      /*
+       * Get the export value through the getter. Caches the export between test runs.
+       */
       get: function () {
         if (dirty) {
           exportValue = getter();
@@ -12332,7 +12335,13 @@ define('wrappers/export-factory',[
         }
 
         return exportValue;
-      }
+      },
+
+      /*
+       * We use this property to check that we are indeed dealing with an export we've wrapped as opposed
+       * to an export beyond rjs.spec's context that also has a .get method.
+       */
+      isRJSSExport: true
     };
   };
 });
@@ -12342,12 +12351,11 @@ define('wrappers/export-factory',[
 */
 
 define('wrappers/factory',[
-  'lodash',
   'wrappers/export-factory',
   'test-framework/run-before-test',
   'logger',
   'config'
-  ], function (lodash, exportFactory, runBeforeTest, logger, config) {
+  ], function (exportFactory, runBeforeTest, logger, config) {
   
 
   return function wrapFactory (factory) {
@@ -12375,11 +12383,15 @@ define('wrappers/factory',[
           var gottenDeps = [];
 
           deps.forEach(function (dep) {
-            if (_.isFunction(dep.get)) {
-              gottenDeps.push(dep.get());
+            var exportValue;
+
+            if (dep.isRJSSExport) {
+              exportValue = dep.get();
             } else {
-              gottenDeps.push(dep);
+              exportValue = dep;
             }
+
+            gottenDeps.push(exportValue);
           });
 
           return loggingFactory.apply(null, gottenDeps);
