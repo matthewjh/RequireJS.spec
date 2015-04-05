@@ -36,11 +36,15 @@ define([
           var gottenDeps = [];
 
           deps.forEach(function (dep) {
-            if (_.isFunction(dep.get)) {
-              gottenDeps.push(dep.get());
+            var exportValue;
+
+            if (dep.isRJSSExport) {
+              exportValue = dep.get();
             } else {
-              gottenDeps.push(dep);
+              exportValue = dep;
             }
+
+            gottenDeps.push(exportValue);
           });
 
           return loggingFactory.apply(null, gottenDeps);

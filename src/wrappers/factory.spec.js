@@ -34,13 +34,15 @@ define([
         dependency1 = {
           get: function () {
             return 'dependency-1';
-          }
+          },
+          isRJSSExport: true
         };
 
         dependency2 = {
           get: function () {
             return 'dependency-2';
-          }
+          },
+          isRJSSExport: true
         };
 
         config.specRegex = /\.spec$/;

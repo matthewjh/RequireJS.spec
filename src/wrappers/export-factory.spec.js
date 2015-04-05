@@ -32,6 +32,10 @@ define([
         expect(logger.callCount).toBe(1);
       });
 
+      it('should have an isRJSSExport property that is set to true', function () {
+        expect(exportObject.isRJSSExport).toBe(true);
+      });
+
       describe('.get', function () {
         it('should call the getter once per time that the runBeforeTest callback has been invoked', function () {
           expect(getter.callCount).toBe(0);

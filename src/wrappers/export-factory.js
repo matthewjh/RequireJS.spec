@@ -20,6 +20,9 @@ define([
     });
 
     return {
+      /*
+       * Get the export value through the getter. Caches the export between test runs.
+       */
       get: function () {
         if (dirty) {
           exportValue = getter();
@@ -31,7 +34,13 @@ define([
         }
 
         return exportValue;
-      }
+      },
+
+      /*
+       * We use this property to check that we are indeed dealing with an export we've wrapped as opposed
+       * to an export beyond rjs.spec's context that also has a .get method.
+       */
+      isRJSSExport: true
     };
   };
 });
